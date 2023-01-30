@@ -293,7 +293,7 @@ class UserController extends Controller
             //=======Notification mail utilisateur=============//
             $header = "Notification reception demande compte dans le système workflow";
             $subject = "Notification reception demande compte dans le système workflow";
-            $zMessageNotification = "Votre demande de compte est enregistré dans le système workflow<br/> on attend l'approbation de l'administrateur <br/> une mail vous sera envoyé dès que cet action est effectué";
+            $zMessageNotification = "Votre demande de compte est enregistré dans le système workflow<br/> on attend l'approbation de l'administrateur <br/> un mail vous sera envoyé dès que cette action est effectuée";
             Helper::sendnotification($user->email,$subject,$header,$zMessageNotification);
 
             //=======Notification mail administrateur==========//
