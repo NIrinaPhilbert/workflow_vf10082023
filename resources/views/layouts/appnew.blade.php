@@ -178,7 +178,7 @@
               <img src="<?php echo asset('images').'/'.$photo_user; ?>" class="img-circle elevation-2" alt="User Image" style="width:30mm;">
             </div>
             <div class="info mt-3">
-              <label class="d-block">{{ Auth::user()->name }}</label>
+              <label class="d-block">{{!! Auth::user()->name !!}}</label>
             </div>
           </div>
           <div class="dropdown-divider"></div>
