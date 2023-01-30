@@ -286,11 +286,11 @@
             //console.log(zImage + '=>ici') ;
             if(zImage == '')
             {
-                zMessageErreur += 'La photo est obligatoire' ;
+                zMessageErreur += '<br/>La photo est obligatoire' ;
             }
             if($('#name').val() == '')
             {
-                zMessageErreur += 'Le champ Nom est obligatoire' ;
+                zMessageErreur += '<br/>Le champ Nom est obligatoire' ;
             }
             if($('#entity_id').val() == '')
             {
