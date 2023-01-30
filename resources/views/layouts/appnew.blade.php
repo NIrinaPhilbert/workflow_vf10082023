@@ -104,7 +104,7 @@
 
 </head>
 <body class="hold-transition sidebar-mini layout-fixed layout-navbar-fixed layout-footer-fixed">
-<?php $user_name = Auth::user()->name;?>
+<?php $user_name = (Auth::user()->name) ? Auth::user()->name : '' ;?>
 <?php $entite_user = Session::get('s_entityid_user');?>
 <?php $entite_user = Session::get('s_entityname_user');?>
 <?php $photo_user = Session::get('s_photo_user') ?? 'user-default.png';?>
