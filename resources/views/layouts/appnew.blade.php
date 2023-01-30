@@ -175,7 +175,7 @@
         <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right" id="profil_submmenu">
           <div class="dropdown-item dropdown-header disabled">
             <div class="image mt-2">
-              <img src="<?php echo asset('images').'/'.$photo_user; ?>" class="img-circle elevation-2" alt="User Image" style="width:45mm;height:50mm;">
+              <img src="<?php echo asset('images').'/'.$photo_user; ?>" class="img-circle elevation-2" alt="User Image" style="width:30mm;">
             </div>
             <div class="info mt-3">
               <label class="d-block">{{ Auth::user()->name }}</label>
