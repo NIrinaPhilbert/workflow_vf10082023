@@ -23,15 +23,7 @@ class UserController extends Controller
     /*public function AuthRouteAPI(Request $request){
         return $request->user();
      }*/
-     public function __construct()
-     {
-         //$this->middleware('auth');
-         echo '<pre>' ;
-         print_r($_REQUEST) ;
-         echo '</pre>' ;
-         exit() ;
-         
-     }
+    
     public function customresetpassword(Request $request){
         if(!empty(request('email'))){
             $zMail = request('email');
