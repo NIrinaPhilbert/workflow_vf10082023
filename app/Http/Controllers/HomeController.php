@@ -34,6 +34,7 @@ class HomeController extends Controller
 
         $user_id = Auth::id();
         $user_name = Auth::user()->name;
+        Session::put('s_user_name', $user_name);
         //echo $user_name;
 
         $entity_user = User::getEntityIdByUserId($user_id);
