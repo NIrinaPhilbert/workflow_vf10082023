@@ -104,7 +104,7 @@
 
 </head>
 <body class="hold-transition sidebar-mini layout-fixed layout-navbar-fixed layout-footer-fixed">
-<?php $user_name = (Auth::user()->name) ? Auth::user()->name : '' ;?>
+<?php $user_name = Auth::user()->name;?>
 <?php $entite_user = Session::get('s_entityid_user');?>
 <?php $entite_user = Session::get('s_entityname_user');?>
 <?php $photo_user = Session::get('s_photo_user') ?? 'user-default.png';?>
@@ -178,7 +178,7 @@
               <img src="<?php echo asset('images').'/'.$photo_user; ?>" class="img-circle elevation-2" alt="User Image" style="width:30mm;">
             </div>
             <div class="info mt-3">
-              <label class="d-block">{{!! Auth::user()->name !!}}</label>
+              <label class="d-block">{{ Auth::user()->name }}</label>
             </div>
           </div>
           <div class="dropdown-divider"></div>
