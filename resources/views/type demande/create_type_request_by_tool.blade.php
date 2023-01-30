@@ -245,7 +245,7 @@
               } else {
                 Swal.fire({
                     title: '',
-                    html: '<span class="text-danger">Vous n\'avez choisi aucune entité.</span>',
+                    html: '<span class="text-danger">Vous n\'avez choisi aucun outil.</span>',
                     icon: 'error',
                     showCancelButton: false,
               confirmButtonText: 'OK',
