@@ -160,11 +160,11 @@
                             <form>
                                 <div class="form-group">
                                     <label for="labMail">Email address</label>
-                                    <input type="email" class="form-control" id="txtmailvisitor" placeholder="saisir votre mail">
+                                    <input type="email" class="form-control" id="txtmailvisitor" placeholder="Saisir votre email">
                                 </div>
                                 <div class="form-group">
                                     <label for="labComment">saisir votre commentaire</label>
-                                    <textarea class="form-control" id="txtComment" rows="10"></textarea>
+                                    <textarea class="form-control" id="txtComment" rows="10" placeholder="Saisir votre commentaire"></textarea>
                                 </div>
                                 <button type="submit" class="btn btn-primary btn-send-comment">Envoyer</button>
                             </form>
@@ -187,8 +187,10 @@
     }); 
     $('body').on('click','.btn-show-modal-comment', function () {
         $('#modal-send-comment').modal('show');
+        /*
         $('#txtmailvisitor').val('Saisir votre mail');
         $('#txtComment').val('Saisir votre commentaire');
+        */
 
     });
     
