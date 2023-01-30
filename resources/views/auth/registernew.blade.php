@@ -283,7 +283,11 @@
             //var bRetour         = true ;
             var zMessageErreur  = '' ;
             var zImage = $('#image').val() ;
-            console.log(zImage + '=>ici') ;
+            //console.log(zImage + '=>ici') ;
+            if(zImage == '')
+            {
+                zMessageErreur += 'La photo est obligatoire' ;
+            }
             if($('#name').val() == '')
             {
                 zMessageErreur += 'Le champ Nom est obligatoire' ;
