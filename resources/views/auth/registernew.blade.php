@@ -282,6 +282,8 @@
         {
             //var bRetour         = true ;
             var zMessageErreur  = '' ;
+            var zImage = $('#image').val() ;
+            console.log(zImage + '=>ici') ;
             if($('#name').val() == '')
             {
                 zMessageErreur += 'Le champ Nom est obligatoire' ;
