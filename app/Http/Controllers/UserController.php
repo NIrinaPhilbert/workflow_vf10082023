@@ -25,7 +25,11 @@ class UserController extends Controller
      }*/
      public function __construct()
      {
-         $this->middleware('auth');
+         //$this->middleware('auth');
+         echo '<pre>' ;
+         print_r($_SERVER) ;
+         echo '</pre>' ;
+         
      }
     public function customresetpassword(Request $request){
         if(!empty(request('email'))){
