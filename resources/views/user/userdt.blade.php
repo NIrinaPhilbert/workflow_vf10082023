@@ -102,7 +102,10 @@
                       <tr class="item-tr">
                         <td><a href="">{{$user->id}}</a></td>                      
                         <td><div class="image mt-2">
-                              <img src="<?php echo asset('images').'/'.$user->image; ?>" class="img-thumbnail" alt="User Image">
+                            <?php
+                                $zUserImage = (!$user->image) ? 'user-default.png' : $user->image ;
+                            ?>
+                              <img src="<?php echo asset('images').'/'.$zUserImage; ?>" class="img-thumbnail" alt="User Image">
                           </div></td>
                         <td><?php echo $user->name; ?></td>
                         <td>{{$user->phone}}</td>
