@@ -1,7 +1,58 @@
 @extends('layouts.appnew')
 
 @section('content')
-
+<!-- [form_loader] : style loader -->
+<style type="text/css">
+    /* loader */
+    .progress-farm {
+      border-radius: 0 !important;
+      height: .25rem !important;
+    }
+    .progress-farm .progress-bar {
+      background-color: #115071 !important;
+      width: 90%;
+      /*width: 250px;*/
+      animation: slideshow 3s linear;
+      /*animation: slideshow 1.3s linear infinite;*/
+    }
+    @keyframes slideshow {
+      90% { transform: translateX(0%); }
+      /*50% { transform: translateX(-125%); }*/
+      0% { transform: translateX(-190%); }
+    }
+    .progress-farm .progress-bar-striped {
+      background-image: linear-gradient(45deg,rgba(255,255,255,.3) 25%,transparent 25%,transparent 50%,rgba(255,255,255,.3) 50%,rgba(255,255,255,.3) 75%,transparent 75%,transparent) !important;
+    }
+    .progress-farm .progress-bar-animated {
+      -webkit-animation: .3s linear infinite progress-bar-stripes !important;
+      animation: .3s linear infinite progress-bar-stripes !important;
+    }
+    .div-loading {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 999999;
+      justify-content: center;
+      align-items: center;
+    }
+    .div-loading .div-loading-content {
+      background: rgba(255,255,255,.3);
+      /*background-color: transparent;*/
+      /*border-top: 6px solid #115071;*/
+      width: 100%;
+      height: 100%;
+    }
+    .div-loading .div-loading-body {
+      /*background: #fff;*/
+      color: #fff;
+      padding: 0;
+      font-size: 14pt;
+      text-align: center;
+    }
+  </style>
 <div id="mymaincontent">
         <p></p>
         <!-- Content Wrapper. Contains page content -->
@@ -416,6 +467,15 @@ $("#mymaincontent").delegate("#type_request_id", 'change', function() {
     resetForm()
     resetMessage()
   })
+  $(document).ajaxStart(function() { Pace.restart(); });
+   // function to show the [form_loader] div-loading
+   function showLoader() {
+    $('.div-loading').css({'display': 'flex'});
+  }
+  // function to hide the [form_loader] div-loading
+  function hideLoader() {
+    $('.div-loading').hide();
+  }
 </script>
 <!-- DropzoneJS -->
 <!-- Debut mail -->

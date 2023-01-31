@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\type_request;
 use App\type_request_tool;
-use App\tool;
+use App\Tool;
 use App\validation_request;
 
 
@@ -254,7 +254,7 @@ class TypeRequestController extends Controller
         $toolId = $tiTR_ToolId[1];
         $type_request = type_request::find($typeRequestId);
         //dd($type_request);
-        $tool= tool::find($toolId);
+        $tool= Tool::find($toolId);
         $entities=DB::table('entities')->orderBy('name','asc')->get();
         //dd($tool);
         $toApprobation = type_request::viewListApprobationByTypeRequestTool($typeRequestId,$toolId);
