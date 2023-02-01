@@ -25,7 +25,7 @@ class type_request extends Model
         return $toDetailCommande ;
     }
     public static function viewListApprobationByTypeRequestTool($typeRequestId,$toolId){
-        $zSqlApprobation = "SELECT `entities`.name as entity_name, `validation_requests`.entity_id as entity_id,`type_requests`.name as type_request_name,`tools`.name as tool_name, `entities`.name as entity_name, `validation_requests`.rank  as rang FROM `validation_requests` 
+        $zSqlApprobation = "SELECT `validation_requests`.entity_id as entity_id,`type_requests`.name as type_request_name,`tools`.name as tool_name, `entities`.name as entity_name, `validation_requests`.rank  as rang FROM `validation_requests` 
         inner join `type_requests` on `validation_requests`.`type_request_id`= `type_requests`.id 
         inner join `tools` on `validation_requests`.tool_id = `tools`.id 
         inner join `entities` on `validation_requests`.entity_id = `entities`.id 

@@ -133,7 +133,7 @@
                     <tr>
                       
                       <th>#</th>
-                      <th>Objetniova</th>
+                      <th>Objet</th>
                       <th>Outils</th>
                       <th>Type demande</th>
                       <th>Status actuel</th>

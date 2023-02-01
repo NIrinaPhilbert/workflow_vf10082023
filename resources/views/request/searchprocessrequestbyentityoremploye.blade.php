@@ -46,7 +46,7 @@
                     </div>
                     <div class="col-md-4 col-lg-4 col-xs-4">
                         <div class="form-group form-group-sm">
-                            <label for="formGroupInputSmall">Entite niova:</label>
+                            <label for="formGroupInputSmall">Entite:</label>
                             <select class="form-control form-perso" id="entityID">
                                 <option value="0">Choisir</option>
                             </select>
@@ -129,7 +129,7 @@
                     <tr>
                       
                       <th>#</th>
-                      <th>Objetniova</th>
+                      <th>Objet</th>
                       <th>Outils</th>
                       <th>Type demande</th>
                       <th>Status</th>
