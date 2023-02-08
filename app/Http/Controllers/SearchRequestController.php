@@ -8,6 +8,7 @@ use App\type_request;
 use App\Tool;
 use App\User;
 use App\Status;
+use App\
 use Helper;
 
 class SearchRequestController extends Controller
@@ -141,12 +142,15 @@ class SearchRequestController extends Controller
                         foreach($files as $file) { 
                             if (in_array($file, array(".",".."))) continue;
                             $ziconfile = Helper::getFileIcon($file);
-                           
+                            $zFileSizeWithUnit = Helper::filesize_formatted($target_request.$file);
+                            //echo 'taille='.$zFileSizeWithUnit;
+                            //exit();
+                            //$zFileSizeWithUnit = '127kb';
                             $zpiecesjointesoulettredemande .= '<li>'.$ziconfile.
                             '<div class="mailbox-attachment-info">
                                     <label class="mailbox-attachment-name">'.$file.'</label>
                                         <span class="mailbox-attachment-size clearfix mt-1">
-                                        <span>187 KB</span>
+                                        <span>'.$zFileSizeWithUnit.'</span>
                                             <a href="docrequest/'.$oreq->id.'/dossier_demande/'.$file.'" class="btn btn-default btn-sm float-right link-download" title="Télécharger" target="blank"><i class="fas fa-download"></i></a>
                                         </span>
                             </div>
@@ -154,7 +158,8 @@ class SearchRequestController extends Controller
                             
                         
                         } 
-
+                        //Get liste traitement par demande
+                        getListProcessAchievementByrequesId($idrequest)
                         //$zlibelletool = 'ici test';
                         $data['tpl'] = '<div class="mailbox-read-info pt-0 pl-3 pr-3">
                                

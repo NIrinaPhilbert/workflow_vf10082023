@@ -559,15 +559,27 @@ class RequestwfController extends Controller
         $zRequestNom = $toRequestwf[0]->Objet ;
         $zDemandeurNom = User::getNameUserbyId($req_histories->owner_request_user_id) ;
         $zDemandeurEntite = User::getEntityNameByUserId($req_histories->owner_request_user_id) ;
-
+        /*echo '<pre>';
+        print_r($oEntityidwithuserid);
+        echo '</pre>';
+        echo 'idprocess='.$idprocess;
+        exit();*/
         foreach($oEntityidwithuserid as $oEntUser){
             $idEnt = $oEntUser->ent;
             $idEmp = $oEntUser->emp;
-            $oprocessuser = new Process_user();
+
+            /*$oprocessuser = new Process_user();
             $oprocessuser->process_id = $idprocess;
             $oprocessuser->entity_id = $idEnt;
             $oprocessuser->user_id = $idEmp;
-            $oprocessuser->save();
+            $oprocessuser->save();*/
+            $idinsertprocessuser = DB::table('process_users')->insertGetId(
+                ['process_id' => $idprocess,
+                'entity_id' => $idEnt,
+                'user_id' => $idEmp 
+                ]
+            );
+    
 
             $zDestinataireEmail = User::getEmailUserbyId($idEmp) ;
 
@@ -575,10 +587,7 @@ class RequestwfController extends Controller
             $zMailTitre = "Notification demande en attente de traitement" ;
             $zMailContenu = "La demande <b>" . $zRequestNom . "</b> de l'utilisateur <b>" . $zDemandeurNom . "</b> de l'entité <b>" . $zDemandeurEntite . "</b> est en attente de votre traitement." ;
             
-            //echo $zDestinataireEmail . '<br/>' ;
-            //echo $zMailTitre . '<br/>' ;
-            //echo $zMailContenu ;
-            //echo '<hr/>' ;
+           
             
             Helper::sendnotification($zDestinataireEmail,$zMailTitre,$zMailTitre,$zMailContenu) ;
             sleep(2) ;

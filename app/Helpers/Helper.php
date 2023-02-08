@@ -120,23 +120,55 @@
         $path_info = pathinfo($namefile);
         $zextension = $path_info['extension'];
 
-        if($zextension == ".pdf"){
+        if($zextension == "pdf"){
             $zimgicon = '<span class="mailbox-attachment-icon"><img class="icon" src="assets_template/dist/img/icons/icon-pdf.png" alt="PDF"></span>';
         }
             
-        if($zextension == ".xlsx"){
+        if($zextension == "xlsx"){
             $zimgicon = '<span class="mailbox-attachment-icon"><img class="icon" src="assets_template/dist/img/icons/icon-xlsx.png" alt="XLSX"></span>';
         }   
         
-        if($zextension == ".doc"){
+        if($zextension == "doc"){
             $zimgicon = '<span class="mailbox-attachment-icon"><img class="icon" src="assets_template/dist/img/icons/icon-doc.png" alt="DOC"></span>';
         }  
-        if($zextension == ".jpg"){
+        if($zextension == "jpg"){
             $zimgicon = '<span class="mailbox-attachment-icon"><img class="icon" src="assets_template/dist/pj/'.$namefile.'" alt="JPG"></span>';
         }
+        
         return $zimgicon;
 
     }
+    public static function formatBytes($size, $precision = 2)
+    {
+        $units = array('B', 'KB', 'MB', 'GB', 'TB'); 
+
+        $bytes = max($bytes, 0); 
+        $pow = floor(($bytes ? log($bytes) : 0) / log(1024)); 
+        $pow = min($pow, count($units) - 1); 
+
+        return round($bytes, $precision) . ' ' . $units[$pow]; 
+    }
+
+    public static function filesize_formatted($file)
+    {
+        $bytes = filesize($file);
+    
+        if ($bytes >= 1073741824) {
+            return number_format($bytes / 1073741824, 2) . ' GB';
+        } elseif ($bytes >= 1048576) {
+            return number_format($bytes / 1048576, 2) . ' MB';
+        } elseif ($bytes >= 1024) {
+            return number_format($bytes / 1024, 2) . ' KB';
+        } elseif ($bytes > 1) {
+            return $bytes . ' bytes';
+        } elseif ($bytes == 1) {
+            return '1 byte';
+        } else {
+            return '0 bytes';
+        }
+        
+    }
+
 
     
  }
