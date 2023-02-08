@@ -4,12 +4,17 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\type_request;
+use App\Tool;
+use App\User;
+use App\Status;
+use Helper;
 
 class SearchRequestController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth');
+        //$this->middleware('auth');
     }
     public function afficher(){
         $data = 8;
@@ -18,7 +23,7 @@ class SearchRequestController extends Controller
     }
     public function showrequestaccordionformat()
     {
-
+        
         if (isset($_GET['got']) && !empty($_GET['got']))
 	    {
             if ($_GET['got'] == "list")
@@ -114,24 +119,48 @@ class SearchRequestController extends Controller
                     {
                         $name = $oreq->subject;
                         $date = date('d/m/Y h:i:s A', strtotime($oreq->created_at));
+                        $content = $oreq->content;
+                        $idtyperequest = $oreq->type_request_id;
+                        $zlibelletyperequest = type_request::getLibelleTypeRequestbyId($idtyperequest);
+                        $idtools = $oreq->tool_id;
+                        $zlibelletool = Tool::getLibelleToolbyId($idtools);
+                        $iduser = $oreq->user_id;
+                        $zNameUserSender = User::getNameUserbyId($iduser);
+                        $zNameEntityUserSender = User::getEntityNameByUserId($iduser);
+                        $zEmailUserSender = User::getEmailUserbyId($iduser);
+                        $idstatus = $oreq->status_id;
+                        $zlibellesatus = Status::getLibelleStatuswithoutStyle($idstatus);
+                        //==================================================//
+                        $zpiecesjointesoulettredemande = "";
+                        
+                        $target_request = public_path().'/docrequest/'.$oreq->id.'/dossier_demande/';
+                        
+                        $files = scandir("$target_request");
+                        $ziconfile = "";
+                        
+                        foreach($files as $file) { 
+                            if (in_array($file, array(".",".."))) continue;
+                            $ziconfile = Helper::getFileIcon($file);
+                           
+                            $zpiecesjointesoulettredemande .= '<li>'.$ziconfile.
+                            '<div class="mailbox-attachment-info">
+                                    <label class="mailbox-attachment-name">'.$file.'</label>
+                                        <span class="mailbox-attachment-size clearfix mt-1">
+                                        <span>187 KB</span>
+                                            <a href="docrequest/'.$oreq->id.'/dossier_demande/'.$file.'" class="btn btn-default btn-sm float-right link-download" title="Télécharger" target="blank"><i class="fas fa-download"></i></a>
+                                        </span>
+                            </div>
+                            </li>';
+                            
+                        
+                        } 
+
+                        //$zlibelletool = 'ici test';
                         $data['tpl'] = '<div class="mailbox-read-info pt-0 pl-3 pr-3">
-                                <h5 class="info-sender">
-                                <span class="info-name">SDSP Manjakandriana</span>
-                                <span class="text-muted info-mail">&lt;sdspmanjakandriana@gmail.com&gt;</span>
-                                </h5> 
+                               
                                 <h6>
-                                <span class="text-muted info-receiver">To</span>
-                                <span class="info-receiver">Philibert</span><a class="text-muted info-toggler dropdown-toggle" data-toggle="dropdown"></a>
                                 <div class="dropdown-menu pt-3 pr-2 pb-3 pl-2">
                                     <table class="table-mail-info">
-                                    <tr>
-                                        <td><span class="text-muted">From :</span></td>
-                                        <td><strong>SDSP Manjakandriana</strong><br/><span class="text-muted">&lt;sdspmanjakandriana@gmail.com&gt;</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td><span class="text-muted">To :</span></td>
-                                        <td><span>Philibert Randriamiaranirina</span><br/><span>&lt;randriamiaranirina@gmail.com&gt;</span></td>
-                                    </tr>
                                     <tr>
                                         <td><span class="text-muted">Date :</span></td>
                                         <td><span>'.$date.'</span></td>
@@ -142,7 +171,7 @@ class SearchRequestController extends Controller
                                     </tr>
                                     <tr>
                                         <td><span class="text-muted">Sent by :</span></td>
-                                        <td><span>workflownv</span></td>
+                                        <td><span>'.$ziconfile.'</span></td>
                                     </tr>
                                     </table>
                                 </div>
@@ -151,105 +180,34 @@ class SearchRequestController extends Controller
                             <div class="mailbox-read-message pt-2 pr-4 pb-2 pl-4">
                                 <p>
                                 <label class="mt-1">Entité source</label><br/>
-                                <span>SDSP Manjakandriana</span>
+                                <span>'.$zNameEntityUserSender.'</span>
                                 </p>
                                 <p>
-                                <label class="mt-1">Utilisateur source</label><br/>
-                                <span>SDSP Manjakandriana</span>
+                                <label class="mt-1">Utilisateur</label><br/>
+                                <span>'.$zNameUserSender.'</span>
                                 </p>
                                 <p>
                                 <label class="mt-1">Outil</label><br/>
-                                <span>DHIS2 COVAX</span>
+                                <span>'.$zlibelletool.'</span>
                                 </p>
                                 <p>
                                 <label class="mt-1">Type de la demande</label><br/>
-                                <span>Demande compte d\'accès</span>
+                                <span>'.$zlibelletyperequest.'</span>
                                 </p>
                                 <p>
                                 <label class="mt-1">Corps de la demande</label><br/>
-                                <span>
-                                    Bonjour à tous,<br/>
-                                    En tant que AT auprès du SDSP Manjakandriana, j\'ai besoin du compte d\'accès en DHIS2.<br/>
-                                    En attaché ci-dessous les demandes relatifs.<br/>
-                                    Cordialement
-                                </span>
+                                <span>'.$content.'</span>
                                 </p>
                                 <p>
                                 <label class="mt-1">Status de la demande</label><br/>
-                                <span>En cours de traitement</span>
+                                <span>'.$zlibellesatus.'</span>
                                 </p>
                             </div>
                             <div class="bg-white pt-3 pl-4 pr-4">
                             <label class="mb-3">Lettre de demande ou pièces jointes</label>
-                            <ul class="mailbox-attachments align-items-stretch clearfix">
-                                <li>
-                                <span class="mailbox-attachment-icon"><img class="icon" src="assets_template/dist/img/icons/icon-pdf.png" alt="PDF"></span>
-
-                                <div class="mailbox-attachment-info">
-                                    <label class="mailbox-attachment-name">Lettre_3.pdf</label>
-                                        <span class="mailbox-attachment-size clearfix mt-1">
-                                        <span>187 KB</span>
-                                        <a href="assets_template/dist/pj/Lettre_3.pdf" class="btn btn-default btn-sm float-right link-download" title="Télécharger" target="blank"><i class="fas fa-download"></i></a>
-                                        </span>
-                                </div>
-                                </li>
-                                <li>
-                                <span class="mailbox-attachment-icon"><img class="icon" src="assets_template/dist/img/icons/icon-pdf.png" alt="PDF"></span>
-
-                                <div class="mailbox-attachment-info">
-                                    <label class="mailbox-attachment-name">fr-troublesbipolaires.pdf</label>
-                                        <span class="mailbox-attachment-size clearfix mt-1">
-                                        <span>142 KB</span>
-                                        <a href="assets/dist/pj/fr-troublesbipolaires.pdf" class="btn btn-default btn-sm float-right link-download" title="Télécharger" target="blank"><i class="fas fa-download"></i></a>
-                                        </span>
-                                </div>
-                                </li>
-                                <li>
-                                <span class="mailbox-attachment-icon"><img class="icon" src="assets_template/dist/img/icons/icon-xlsx.png" alt="XLSX"></span>
-
-                                <div class="mailbox-attachment-info">
-                                    <label class="mailbox-attachment-name">Template_Guest_Invitations_V4.xlsx</label>
-                                        <span class="mailbox-attachment-size clearfix mt-1">
-                                        <span>33 KB</span>
-                                        <a href="assets/dist/pj/Template_Guest_Invitations_V4.xlsx" class="btn btn-default btn-sm float-right link-download" title="Télécharger" target="blank"><i class="fas fa-download"></i></a>
-                                        </span>
-                                </div>
-                                </li>
-                                <li>
-                                <span class="mailbox-attachment-icon"><img class="icon" src="assets_template/dist/img/icons/icon-doc.png" alt="DOC"></span>
-
-                                <div class="mailbox-attachment-info">
-                                    <label class="mailbox-attachment-name">Lettre_3.doc</label>
-                                        <span class="mailbox-attachment-size clearfix mt-1">
-                                        <span>291 KB</span>
-                                        <a href="assets/dist/pj/Lettre_3.doc" class="btn btn-default btn-sm float-right link-download" title="Télécharger" target="blank"><i class="fas fa-download"></i></a>
-                                        </span>
-                                </div>
-                                </li>
-                                <li>
-                                <span class="mailbox-attachment-icon"><img class="icon" src="assets_template/dist/pj/This-image.jpg" alt="JPG"></span>
-
-                                <div class="mailbox-attachment-info">
-                                    <label class="mailbox-attachment-name">This-image.jpg</label>
-                                        <span class="mailbox-attachment-size clearfix mt-1">
-                                        <span>96 KB</span>
-                                        <a href="assets/dist/pj/This-image.jpg" class="btn btn-default btn-sm float-right link-view ml-1" title="Voir" data-toggle="lightbox" data-title="This-image.jpg" data-gallery="gallery"><i class="fas fa-eye"></i></a>
-                                        <a href="assets/dist/pj/This-image.jpg" class="btn btn-default btn-sm float-right link-download" title="Télécharger" target="blank"><i class="fas fa-download"></i></a>
-                                        </span>
-                                </div>
-                                </li>
-                                <li>
-                                <span class="mailbox-attachment-icon"><img class="icon" src="assets_template/dist/img/icons/icon-xlsx.png" alt="XLSX"></span>
-
-                                <div class="mailbox-attachment-info">
-                                    <label class="mailbox-attachment-name">Template_Guest_Invitations_V4.xlsx</label>
-                                        <span class="mailbox-attachment-size clearfix mt-1">
-                                        <span>33 KB</span>
-                                        <a href="assets_template/dist/pj/Template_Guest_Invitations_V4.xlsx" class="btn btn-default btn-sm float-right link-download" title="Télécharger" target="blank"><i class="fas fa-download"></i></a>
-                                        </span>
-                                </div>
-                                </li>
-                            </ul>
+                            <ul class="mailbox-attachments align-items-stretch clearfix">'.
+                            $zpiecesjointesoulettredemande.
+                            '</ul>
                             </div>
                             <div class="bg-white pt-2 pb-3 pl-4 pr-4">
                             <label class="mb-3">Liste traitement de la demande</label>

@@ -42,4 +42,17 @@ class Status extends Model
          return $zLibstyle;
         
     }
+
+    public static function getLibelleStatuswithoutStyle($statusId){
+      $libstatus = "";
+    
+      $result = DB::table('statuses')
+                  ->where('statuses.id','=',$statusId)
+                  ->get();
+      foreach($result as $status)
+      {
+          $libstatus= $status->name;
+      }
+      return $libstatus;
+    }
 }

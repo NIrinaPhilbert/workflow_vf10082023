@@ -103,6 +103,11 @@
 					<td class="text-left"><span><?php echo strip_tags($oDetailRequest->Content) ;?></span></td>
 					
 				</tr>
+				<tr>
+					<td class="text-left"><label>Situation actuel demande</label></td>
+					<td class="text-left"><span><span><?php echo $oDetailRequest->status ;?></span></td>
+					
+				</tr>
 			
 			<?php } ?>
 				
@@ -117,10 +122,10 @@
 				<tr>
 					<th class="text-left"><label>N°</label></th>
 					<th class="text-left"><label>Etat</label></th>
-					<th class="text-left"><label>Acteur</label></th>
+					<th class="text-left"><label>Action  effectuée par</label></th>
 					<th class="text-left"><label>Date</label></th>
 					<th class="text-left"><label>Commentaire</label></th>
-					<th class="text-left"><label>Entite</label></th>
+					<th class="text-left"><label>Entite responsable action</label></th>
 				</tr>
 			</thead>
 			<tbody>

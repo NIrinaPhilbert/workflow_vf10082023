@@ -304,16 +304,7 @@
     */
     $('body').on('click', '.btn-active2', function(e) {
 
-        /*$.blockUI({message: 'Please wait',
-                        css: {
-                            border: 'none',
-                            padding: '15px',
-                            backgroundColor: '#000',
-                            '-webkit-border-radius': '10px',
-                            '-moz-border-radius': '10px',
-                            opacity: .5,
-                            color: '#fff',
-                        }});*/
+       
        
         var param_request = $(this).attr("data-id");
         var urlnextpage =$("#txtUrl").val()+'/'+$("#txtEntityID").val();
@@ -326,7 +317,7 @@
             type: "get",                        
             url:"<?php echo url("request/checkmaxrank/");?>"+'/'+param_request,
             context:document.body,
-            async:false,
+            async:true,
             
             success: function (data) {
                 //alert(data);
@@ -336,42 +327,46 @@
                         html: '<span class="text-lg">Etes vous sur de valider ce demande?</span>',
                         icon: 'question',
                         showCancelButton: true,
+                        showLoaderOnConfirm: true,
+                        customClass: {
+                            confirmButton: 'btn btn-md btn-outline-primary mx-1',
+                            cancelButton: 'btn btn-md btn-outline-secondary mx-1'
+                        },
+                        buttonsStyling: false,
                         confirmButtonText: 'Yes',
-                        cancelButtonText: 'No'
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            
-                                $.ajax({
+                        cancelButtonText: 'No',
+                        allowOutsideClick: false,
+                        allowEscapeKey: false,
+                        preConfirm: () => {
+                           return $.ajax({
                                     type: "get",                        
                                     
                                     url:"<?php echo url("request/valid/");?>"+'/'+param_request,
                                     context:document.body,
-                                    async:false,
+                                    async:true,
                                     success: function (data) {
                                         window.location = urlnextpage;
-                                        
+                                        return data;
                                         },
                                     error: function (data) {
-                                        console.log('Error:', data);
+                                        //console.log('Error:', data);
+                                        alert("Error when adding data");
                                     },
-                                    beforeSend: function() {
-                                        //setTimeout($.unblockUI, 1500);
-                                        
-                                        
-                                        
-                                    },
-                                    complete: function() {
-                                        //alert('complete');
-                                        //$("#imgSpinner1").hide();
-                                        //$('.overlaytest').hide() ;
-                                    }
+                                    
 
                                 });
+                        
+                        }
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            
+                            //window.location.reload()  
                                 
                         }
                     })
+                    
 
-                }
+                }//end if data == 0
                 if(data=="1")
                 {
                     $('#modal-valid-final').modal('show');
@@ -401,30 +396,36 @@
             html: '<span class="text-lg">Etes vous sur de refuser ce demande?</span>',
             icon: 'question',
             showCancelButton: true,
+            showLoaderOnConfirm: true,
+            customClass: {
+                confirmButton: 'btn btn-md btn-outline-primary mx-1',
+                cancelButton: 'btn btn-md btn-outline-secondary mx-1'
+            },
+            buttonsStyling: false,
             confirmButtonText: 'Yes',
-            cancelButtonText: 'No'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                
-                    $.ajax({
+            cancelButtonText: 'No',
+            allowOutsideClick: false,
+            allowEscapeKey: false,
+            preConfirm: () => {
+            return $.ajax({
                         data: {param_request:param_request,reason_reject:reason_reject},
                         type: "post",                        
                         url:"{{route('requestwf.reject')}}",
                         context:document.body,
-                        async:false,
+                        async:true,
                         success: function (data) {
-                            //alert(data);
-                            console.log(data);
                             window.location = urlnextpage;
-                            
+                            return data;
                             },
                         error: function (data) {
-                            console.log('Error:', data);
+                            //console.log('Error:', data);
+                            alert("Error when adding data");
                         }
                     });
-                    /*if(success){
-                        window.open(urlnextpage)
-                    }*/
+      }
+
+        }).then((result) => {
+            if (result.isConfirmed) {   
             }
         })
     })
@@ -457,42 +458,47 @@
             html: '<span class="text-lg">Etes vous sur de valider ce demande pour le traitement?</span>',
             icon: 'question',
             showCancelButton: true,
+            showLoaderOnConfirm: true,
+            customClass: {
+                confirmButton: 'btn btn-md btn-outline-primary mx-1',
+                cancelButton: 'btn btn-md btn-outline-secondary mx-1'
+            },
+            buttonsStyling: false,
             confirmButtonText: 'Yes',
-            cancelButtonText: 'No'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                
-                    $.ajax({
+            cancelButtonText: 'No',
+            allowOutsideClick: false,
+            allowEscapeKey: false,
+            preConfirm: () => {
+                return $.ajax({
                         data: {param_request:param_request,approv_comment:approv_comment, entityidwithuserid:entityidwithuserid},
                         type: "post",                        
                         url:"{{route('requestwf.validforprocessing')}}",
                         context:document.body,
-                        async:false,
+                        async:true,
                         success: function (data) {
                             //alert(data);
-                            console.log(data);
+                            //console.log(data);
                             window.location = urlnextpage;
+                            return data;
                             
                             },
                         error: function (data) {
-                            console.log('Error:', data);
+                            //console.log('Error:', data);
+                            alert("Error when adding data");
                         },
-                        beforeSend: function() {
-                            //$('.swal2-question').html('<img src="https://cssauthor.com/wp-content/uploads/2018/06/Bouncy-Preloader.gif"/>') ;
-                            //setTimeout($.unblockUI, 500);
-                            //alert('ici');
-                            //$(".swal2-loader").show();
-                        },
-                        complete: function() {
-                            //alert('ok');
-                            //$("#imgSpinner1").hide();
-                        }
-                    });
-                    /*if(success){
-                        window.open(urlnextpage)
-                    }*/
+                        
+                        });
+            
+            }
+        }).then((result) => {
+            if (result.isConfirmed) {
+                
+                //window.location.reload()  
+                    
             }
         })
+        
+        
     })
     $('body').on('click','.btn-refused', function () {
         $('#modal-motif-refusal').modal('show');

@@ -113,6 +113,30 @@
         $data = curl_exec($ch);
         //echo $data;
     }
+    
+    public static function getFileIcon($namefile){
+        $zimgicon = "";
+        $zextension = "";
+        $path_info = pathinfo($namefile);
+        $zextension = $path_info['extension'];
+
+        if($zextension == ".pdf"){
+            $zimgicon = '<span class="mailbox-attachment-icon"><img class="icon" src="assets_template/dist/img/icons/icon-pdf.png" alt="PDF"></span>';
+        }
+            
+        if($zextension == ".xlsx"){
+            $zimgicon = '<span class="mailbox-attachment-icon"><img class="icon" src="assets_template/dist/img/icons/icon-xlsx.png" alt="XLSX"></span>';
+        }   
+        
+        if($zextension == ".doc"){
+            $zimgicon = '<span class="mailbox-attachment-icon"><img class="icon" src="assets_template/dist/img/icons/icon-doc.png" alt="DOC"></span>';
+        }  
+        if($zextension == ".jpg"){
+            $zimgicon = '<span class="mailbox-attachment-icon"><img class="icon" src="assets_template/dist/pj/'.$namefile.'" alt="JPG"></span>';
+        }
+        return $zimgicon;
+
+    }
 
     
  }

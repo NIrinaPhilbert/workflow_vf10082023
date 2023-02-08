@@ -70,4 +70,17 @@ class type_request extends Model
         $zSqlSupprDetailCommande = "DELETE FROM validation_requests WHERE type_request_id=".$_ityperequest." and tool_id=". $_itool ; 
         $zQuerySupprDetailCommande = DB::select($zSqlSupprDetailCommande) ;
     }
+    public static function getLibelleTypeRequestbyId($typerequestId){
+        $zRes = "";
+        $result = DB::table('type_requests')
+                    ->select('type_requests.name as type_request_name')
+                    ->where('type_requests.id','=',$typerequestId)
+                    ->get();
+        foreach($result as $typerequest)
+        {
+            $zRes = $typerequest->type_request_name;
+        }
+        return $zRes;
+
+    }
 }

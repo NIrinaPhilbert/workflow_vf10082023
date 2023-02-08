@@ -240,15 +240,16 @@
               </p>
             </a>
           </li>
-          <!----
+          <!--
           <li class="nav-item">
-            <a href="<?php //$vSessionEntityUser=Session::get('s_entityid_user'); echo url("searchrequest");?>" class="nav-link active">
+            <a href="<?php $vSessionEntityUser=Session::get('s_entityid_user'); //echo url("searchrequest");?>" class="nav-link active">
               <i class="nav-icon fas fa-list"></i>
               <p>
-                Recherche demande
+                Recherche demande pour detail
               </p>
             </a>
-          </li>-->
+          </li>
+          -->
           @can('create', App\User::class)
           <li class="nav-item">
             <a href="<?php $vSessionEntityUser=Session::get('s_entityid_user'); echo url("searchstatusrequestbyentity");?>" class="nav-link active">

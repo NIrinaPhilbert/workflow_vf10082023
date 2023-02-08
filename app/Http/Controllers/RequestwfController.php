@@ -640,7 +640,16 @@ class RequestwfController extends Controller
        
     }
     public function searchrequest(){
-        return view('request.searchrequest');
+        //return view('request.searchrequest');
+        $lrequests = Requestwf::getListAllRequestInProcess();
+        $ListTypeRequest = DB::Table('type_requests')
+        ->orderBy('name','ASC')
+        ->get();
+        $NumberRecordInit1 = $lrequests->count();
+        //echo $NumberRecordInit1;
+        //exit();
+        return view('request.searchstatusrequestbyentityoremploye_accordeon', compact('lrequests','ListTypeRequest','NumberRecordInit1'));
+        //return view('request.searchstatusrequestbyentityoremploye_accordeon')
     }
 
     public function searchstatusrequestbyentity(){
@@ -694,14 +703,16 @@ class RequestwfController extends Controller
 
         $zRowListRequest = Requestwf::getListRequestByStatusProcess();
         
-        $zListrequest = "select requestwfs.id as idrequest, requestwfs.status_id as status, requestwfs.subject as objectreq, requestwfs.user_id as sender, 
+        $zListrequest = "select requestwfs.id as idrequest, requestwfs.status_id as status,statuses.name as libstatus, requestwfs.subject as objectreq, requestwfs.user_id as sender, 
                         requestwfs.created_at as datecreation, process_users.user_id as urserresptrait, 
                         type_requests.name as nametyperequest, tools.name as nametool 
                         from process_users inner join processings 
                         on process_users.process_id = processings.id inner join requestwfs 
                         on processings.requestwf_id = requestwfs.id inner join type_requests 
                         on requestwfs.type_request_id = type_requests.id inner join tools 
-                        on requestwfs.tool_id = tools.id  where process_users.user_id = ".$iuserID.$zSQLWhereEntity.$zSQLWhere.
+                        on requestwfs.tool_id = tools.id  inner join statuses 
+                        on requestwfs.status_id = statuses.id 
+                        where process_users.user_id = ".$iuserID.$zSQLWhereEntity.$zSQLWhere.
                         "group by processings.requestwf_id";
         
         $zquery = DB::connection('mysql')->select($zListrequest);
@@ -713,7 +724,7 @@ class RequestwfController extends Controller
               <td>'.$requestwf->objectreq.'</td>
               <td>'.$requestwf->nametool.'</td>
               <td>'.$requestwf->nametyperequest.'</td>
-              <td>'.$requestwf->status.'</td>
+              <td>'.$requestwf->libstatus.'</td>
               <td>'.$requestwf->datecreation.'</td>
               <td><a href="'.url("viewdetailrequest/{$requestwf->idrequest}").'>"><i class="fas fa-eye text-primary"></i></a>                      
               </td>

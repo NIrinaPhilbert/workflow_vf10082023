@@ -97,6 +97,18 @@ class SuiviDemandeController extends Controller
                     ->get() ;
                     $iActeurId  = $toTableProcessing[0]->sender_request_user_id ;
                     $iProcessId = $toTableProcessing[0]->id ;
+                    $toTableUserProcess = DB::table('process_users')
+                    ->join('users','users.id', '=', 'process_users.user_id')
+                    ->select('process_users.id as processuserid','users.name as username')
+                    ->where('process_users.process_id',$iProcessId)
+                    ->orderBy('process_users.id','ASC')
+                    ->get(); 
+                    $zUserProcess = "" ;
+                    foreach($toTableUserProcess as $oUserProcess){
+                        if($zUserProcess == "") $zUserProcess .= $oUserProcess->username;
+                        else $zUserProcess = $zUserProcess." et de ".$oUserProcess->username;
+                    }
+                    $toRequestHistoryLigne['etat'] = "Validé final et En attente traitement de ".$zUserProcess;
                 break ;
                 case 5 :
                     $iActeurId  = $oTableRequestHistory->sender_request_user_id ;

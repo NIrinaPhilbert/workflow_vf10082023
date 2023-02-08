@@ -264,7 +264,7 @@ $.ajax({
   //alert(data);
   //return false; 
   const tzData = data.split("_");
-  alert(data);
+  //alert(data);
       $("#spnnbenreg").html(tzData[0]);
       $("#idtbody").html("");
       $("#idtbody").html(tzData[1]);
@@ -274,8 +274,8 @@ $.ajax({
         "initComplete": function(settings, json) {
           var api = this.api();
           var numRows = api.rows( ).count();
-          alert('ok');
-          alert('ici'+numRows);
+          //alert('ok');
+          //alert('ici'+numRows);
           // Place the value in your HTML using jQuery, etc
         },
         

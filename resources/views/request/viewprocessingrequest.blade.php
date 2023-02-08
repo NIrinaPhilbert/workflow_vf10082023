@@ -279,7 +279,7 @@
                                     <!---------------------------------------------------->
                                     <!-- DropzoneJS -->
                                     <div class="input-group mb-3">
-                                                            <label class="w-100">Lettre de demande ou autre pièce jointe</label>
+                                                            <label class="w-100">Pièces jointes complémentaires de réponse</label>
                                                             <div id="actions" class="row w-100">
                                                                   <div class="col-lg-6">
                                                                     <div class="btn-group w-100">
@@ -367,7 +367,7 @@
   }); 
   
     $('body').on('click', '.btn-save-process', function(e) {
-        //alert('ici');
+        
         //var param_request = $(this).attr("data-id");//idrequest
         var param_process = $(this).attr("data-id");//idprocess+idrequest
         var process_status = $("#process_status").val();
@@ -378,31 +378,41 @@
         e.preventDefault()
         let _this = $(this)
         Swal.fire({
-            html: '<span class="text-lg">Etes vous sur de valider ce demande?</span>',
+            html: '<span class="text-lg">Etes vous sur de procéder au traitement de ce demande?</span>',
             icon: 'question',
             showCancelButton: true,
             confirmButtonText: 'Yes',
-            cancelButtonText: 'No'
-        }).then((result) => {
-            if (result.isConfirmed) {
-               
-                    $.ajax({
+            cancelButtonText: 'No',
+            showLoaderOnConfirm: true,
+            customClass: {
+              confirmButton: 'btn btn-md btn-outline-primary mx-1',
+              cancelButton: 'btn btn-md btn-outline-secondary mx-1'
+            },
+            buttonsStyling: false,
+            confirmButtonText: 'Yes',
+            cancelButtonText: 'No',
+            allowOutsideClick: false,
+            allowEscapeKey: false,
+            preConfirm: () => {
+            return $.ajax({
                         data: {param_process:param_process,process_status:process_status,process_date:process_date,comment_process:comment_process},
                         type: "post",                        
                         url:"{{route('requestwf.process')}}",
                         context:document.body,
-                        async:false,
+                        async:true,
                         success: function (data) {
                             window.location = urlnextpage;
-                            
+                            return data
                             },
                         error: function (data) {
-                            console.log('Error:', data);
+                            //console.log('Error:', data);
+                            alert("Error when adding data")
                         }
                     });
-                    /*if(success){
-                        window.open(urlnextpage)
-                    }*/
+      }
+        }).then((result) => {
+            if (result.isConfirmed) {
+             
             }
         })
     })
@@ -411,7 +421,7 @@
             $('#modal-process').modal('show');
     })
     $('body').on('click', '.btn-final-process', function(e) {
-        //alert('ici');
+        //alert('ici3333');
         var param_process = $(this).attr("data-id");//idprocess+idrequest
         
         var process_status = 1;
@@ -426,29 +436,38 @@
             icon: 'question',
             showCancelButton: true,
             confirmButtonText: 'Yes',
-            cancelButtonText: 'No'
-        }).then((result) => {
-            if (result.isConfirmed) {
-               
-                    $.ajax({
+            showLoaderOnConfirm: true,
+            customClass: {
+              confirmButton: 'btn btn-md btn-outline-primary mx-1',
+              cancelButton: 'btn btn-md btn-outline-secondary mx-1'
+            },
+            buttonsStyling: false,
+            confirmButtonText: 'Yes',
+            cancelButtonText: 'No',
+            allowOutsideClick: false,
+            allowEscapeKey: false,
+            preConfirm: () => {
+                return $.ajax({
                         data: {param_process:param_process,process_status:process_status,process_date:process_date,comment_process:comment_process},
                         type: "post",                        
                         url:"{{route('requestwf.finalizerequest')}}",
                         context:document.body,
-                        async:false,
+                        async:true,
                         success: function (data) {
                             window.location = urlnextpage;
-                            
+                            return data;
                             },
                         error: function (data) {
                             console.log('Error:', data);
+                            alert("Error when adding data");
                         }
                     });
-                    /*if(success){
-                        window.open(urlnextpage)
-                    }*/
+              }
+            }).then((result) => {
+            if (result.isConfirmed) {
+            
             }//fin if confirmed
-        })
+          })
       })
     
     
