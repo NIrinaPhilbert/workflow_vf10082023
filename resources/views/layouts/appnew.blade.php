@@ -100,6 +100,21 @@
 <!-------------------->
 <style type="text/css">
   .os-scrollbar-vertical{background:#c1c1c1!important;}
+  .spnNotif{
+    background: #f00;
+    width: 25px;
+    height: 25px;
+    display: inline-block;
+    text-align: center;
+    border-radius: 20px;
+    position: absolute;
+    right: 0px;
+    top: -7px;
+    font-size: 14px;
+    font-weight: bolder;
+  }
+  .linkActive{background: #28a745 !important;}
+  
 </style>
 
 </head>
@@ -215,44 +230,58 @@
       <!-- Sidebar Menu -->
       <nav class="mt-2">
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-          <li class=" btn btn-success mb-2">MENU</li>
+          <li class=" btn btn-secondary mb-2">MENU</li>
 		  <li class="nav-item">
-            <a href="<?php $vSessionEntityUser=Session::get('s_entityid_user'); echo url("request/{$vSessionEntityUser}");?>" class="nav-link active">
+            <a href="<?php $vSessionEntityUser=Session::get('s_entityid_user'); echo url("request/{$vSessionEntityUser}");?>" class="nav-link active <?php if(strpos($_SERVER['REQUEST_URI'], '/request') !== false){?> linkActive <?php } ?>">
               <i class="nav-icon fa fa-paper-plane"></i>
               <p>
-                Liste demande envoyé
+                Liste demande envoyé 
+                <?php
+                 
+                   $toRequest = App\Requestwf::getListRequestByEntity($vSessionEntityUser) ;
+                   ?>
+                
+                <span class="spnNotif" style="background:#3c8dbc!important;border:0.5px solid #e1e1e1;"><?php echo sizeof($toRequest) ; ?></span>
               </p>
             </a>
           </li>
 		    <li class="nav-item">
-            <a href="<?php $vSessionEntityUser=Session::get('s_entityid_user'); echo url("pendingrequest/{$vSessionEntityUser}");?>" class="nav-link active">
+            <a href="<?php $vSessionEntityUser=Session::get('s_entityid_user'); echo url("pendingrequest/{$vSessionEntityUser}");?>" class="nav-link active <?php if(strpos($_SERVER['REQUEST_URI'], '/pendingrequest') !== false){?> linkActive <?php } ?>">
               <i class="nav-icon fa fa-check-square"></i>
               <p>
                 Liste demande en attente validation
+                <?php
+                  $toRequestPendingByEntity = App\Requestwf::getListRequestPendingByEntityforNotif($vSessionEntityUser) ;  
+                ?>
+                <span class="spnNotif"><?php echo sizeof($toRequestPendingByEntity);?></span>
               </p>
             </a>
           </li>
 		    <li class="nav-item">
-            <a href="<?php $vSessionEntityUser=Session::get('s_entityid_user'); echo url("processingrequest");?>" class="nav-link active">
+            <a href="<?php $vSessionEntityUser=Session::get('s_entityid_user'); echo url("processingrequest");?>" class="nav-link active <?php if(strpos($_SERVER['REQUEST_URI'], '/processingrequest') !== false){?> linkActive <?php } ?>">
               <i class="nav-icon fa fa-play-circle"></i>
               <p>
                 Liste demande en attente traitement
+                <?php
+                   $ListRequestProcessing = App\Processing::getListProcessingByUserId(Session::get('s_userid')) ;
+                ?>
+                <span class="spnNotif"><?php echo sizeof($ListRequestProcessing);?></span>
               </p>
             </a>
           </li>
-          <!----
+          
           <li class="nav-item">
-            <a href="<?php $vSessionEntityUser=Session::get('s_entityid_user'); //echo url("searchrequest");?>" class="nav-link active">
+            <a href="<?php $vSessionEntityUser=Session::get('s_entityid_user'); echo url("searchrequest");?>" class="nav-link active <?php if(strpos($_SERVER['REQUEST_URI'], '/searchrequest') !== false){?> linkActive <?php } ?>">
               <i class="nav-icon fas fa-list"></i>
               <p>
                 Recherche demande pour detail
               </p>
             </a>
           </li>
-          ---->
+          
           @can('create', App\User::class)
           <li class="nav-item">
-            <a href="<?php $vSessionEntityUser=Session::get('s_entityid_user'); echo url("searchstatusrequestbyentity");?>" class="nav-link active">
+            <a href="<?php $vSessionEntityUser=Session::get('s_entityid_user'); echo url("searchstatusrequestbyentity");?>" class="nav-link active <?php if(strpos($_SERVER['REQUEST_URI'], '/searchstatusrequestbyentity') !== false){?> linkActive <?php } ?>">
             
             <i class="nav-icon fas fa-list"></i>
               <p>
@@ -263,7 +292,7 @@
           @endcan
           @can('create', App\User::class)
           <li class="nav-item">
-            <a href="<?php $vSessionEntityUser=Session::get('s_entityid_user'); echo url("showprocessrequestbyentityoremp");?>" class="nav-link active">
+            <a href="<?php $vSessionEntityUser=Session::get('s_entityid_user'); echo url("showprocessrequestbyentityoremp");?>" class="nav-link active <?php if(strpos($_SERVER['REQUEST_URI'], '/showprocessrequestbyentityoremp') !== false){?> linkActive <?php } ?>">
              
             <i class="nav-icon fas fa-list"></i>
               <p>
@@ -274,7 +303,7 @@
           @endcan
           @can('create', App\User::class)
           <li class="nav-item">
-            <a href="<?php echo url("userdatatable");?>" class="nav-link active">
+            <a href="<?php echo url("userdatatable");?>" class="nav-link active <?php if(strpos($_SERVER['REQUEST_URI'], '/userdatatable') !== false){?> linkActive <?php } ?>">
               <i class="nav-icon fas fa-users"></i>
               <p>
                 Utilisateur
@@ -285,7 +314,7 @@
           
           @can('create', App\validation_request::class)
 		      <li class="nav-item">
-            <a href="<?php echo url("approbation_type_demande");?>" class="nav-link active">
+            <a href="<?php echo url("approbation_type_demande");?>" class="nav-link active <?php if(strpos($_SERVER['REQUEST_URI'], '/approbation_type_demande') !== false){?> linkActive <?php } ?>">
               <i class="nav-icon fa fa-gears"></i>
               <p>
                 Validation type demande
@@ -295,7 +324,7 @@
           @endcan
           @can('create', App\type_request::class)
           <li class="nav-item">
-            <a href="<?php echo url("typerequestdatatable");?>" class="nav-link active">
+            <a href="<?php echo url("typerequestdatatable");?>" class="nav-link active <?php if(strpos($_SERVER['REQUEST_URI'], '/typerequestdatatable') !== false){?> linkActive <?php } ?>">
               <i class="nav-icon fas fa-hand-holding"></i>
               <p>
                 Type demande
@@ -305,7 +334,7 @@
           @endcan
           @can('create', App\Tool::class)
           <li class="nav-item">
-            <a href="<?php echo url("tooldatatable");?>" class="nav-link active">
+            <a href="<?php echo url("tooldatatable");?>" class="nav-link active <?php if(strpos($_SERVER['REQUEST_URI'], '/tooldatatable') !== false){?> linkActive <?php } ?>">
               <i class="nav-icon fas fa-toolbox"></i>
               <p>
                 Outil
@@ -315,7 +344,7 @@
           @endcan
           @can('create', App\Entity::class)
           <li class="nav-item">
-            <a href="<?php echo url("entitydatatable");?>" class="nav-link active">
+            <a href="<?php echo url("entitydatatable");?>" class="nav-link active <?php if(strpos($_SERVER['REQUEST_URI'], '/entitydatatable') !== false){?> linkActive <?php } ?>">
               <i class="nav-icon fa fa-institution"></i>
               <p>
                 Entité
@@ -325,7 +354,7 @@
           @endcan
           @can('create', App\User::class)
           <li class="nav-item">
-            <a href="<?php echo url("showcomment");?>" class="nav-link active">
+            <a href="<?php echo url("showcomment");?>" class="nav-link active <?php if(strpos($_SERVER['REQUEST_URI'], '/showcomment') !== false){?> linkActive <?php } ?>">
               <i class="nav-icon fa fa-institution"></i>
               <p>
                 Voir commentaire

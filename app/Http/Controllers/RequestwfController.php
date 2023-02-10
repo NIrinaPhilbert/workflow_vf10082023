@@ -12,6 +12,7 @@ use App\Process_User;
 use App\validation_request;
 use App\Requestwf_email_address;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\URL;
 use Session;
 use Helper; // Important
 //====================================//
@@ -31,12 +32,33 @@ class RequestwfController extends Controller
     }
     public function index($entityid)
     {
+        
+        if($entityid != Session::get('s_entityid_user'))
+        {
+            header('Location: /home');
+            exit() ;
+        }
         $lrequests = Requestwf::getListRequestByEntity($entityid);
         
         
         return view('request.index', compact('lrequests'));
     }
     public function view($id){
+        //Voir Les demandes envoyées par mon entité
+        $tiRequestId = array() ;
+        $toRequestSentByMyEntity = Requestwf::getListRequestByEntity(Session::get('s_entityid_user'));
+        foreach($toRequestSentByMyEntity as $oRequestSentByMyEntity)
+        {
+       
+            array_push($tiRequestId, $oRequestSentByMyEntity->ID) ;
+        }
+        if(!in_array($id, $tiRequestId))
+        {
+            header('Location: /home');
+            exit() ;
+        }
+
+
         $requestwf = Requestwf::getRequestById($id);
         $ListProcessAchievementByRequestID = Process_achievement::getListProcessAchievementByRequesId($id);
         $iNombreTraitement = $ListProcessAchievementByRequestID->count();
@@ -45,6 +67,11 @@ class RequestwfController extends Controller
 
     public function show_pending($entityid)
     {
+        if($entityid != Session::get('s_entityid_user'))
+        {
+            header('Location: /home');
+            exit() ;
+        }
         $data = DB::table('entities')->orderBy('name','asc')->get();
        
         $ListRequestPendingbyentity = DB::table('request_histories')

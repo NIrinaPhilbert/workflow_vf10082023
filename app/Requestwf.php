@@ -17,7 +17,21 @@ class Requestwf extends Model
     public function type_request(){
         return $this->belongsTo('App\type_request');
     }
-
+    
+    public static function getListRequestPendingByEntityforNotif($entity_id)
+    {
+        $ListRequestbyentity1 = DB::table('request_histories')
+        ->join('requestwfs','requestwfs.id','=','request_histories.requestwf_id')
+        ->join('type_requests','type_requests.id', '=', 'requestwfs.type_request_id')
+        ->join('tools','tools.id', '=', 'requestwfs.tool_id')
+        ->select('requestwfs.id as idrequest','request_histories.id as idrequesthistories','requestwfs.subject as Objetwf','requestwfs.user_id as usersourceid','tools.name as toolname','tools.id as idtool','type_requests.id as idtyperequest','type_requests.name as type_requestname','request_histories.etat_id as etat','requestwfs.created_at as created_at')
+        ->where('request_histories.is_finished',0)
+        ->where('request_histories.destination_entity_id',$entity_id)
+        ->orderBy('request_histories.id','DESC')
+        ->get();  
+        return $ListRequestbyentity1 ;  
+    }
+    
     public static function getListRequestByEntity($entity_id)
     {
         $ListRequestbyentity = DB::table('requestwfs')

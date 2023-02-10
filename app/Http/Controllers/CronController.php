@@ -68,6 +68,8 @@ public function index(){
 
     }
     public function sendmailrappel(){
+        phpinfo() ;
+        exit() ;
         $email_admin = 'randriamiaranirina@gmail.com';
         $subjectm = 'Test mail pour cron';
         $header = 'header mail pour cron';

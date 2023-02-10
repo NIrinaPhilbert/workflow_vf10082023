@@ -201,12 +201,13 @@ function loadRequest(page) {
         method: 'post',
         url: "showrequestaccordionformat?got=list&page="+page,
         data: { search: $('#search-accordion').val() },
-        dataType: 'json',
+       dataType: 'json',
 		//dataType: 'text',
+		//dataType: 'html',
         async: true,
         success: function(data){
 			$('#spnnbenreg').html(data.data.length);
-//			console.log(data) ;
+			//console.log(data) ;
 			//return false ;
         	var tpl = ''
         	if (data.data.length > 0) {

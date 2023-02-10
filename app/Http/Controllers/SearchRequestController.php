@@ -8,13 +8,14 @@ use App\type_request;
 use App\Tool;
 use App\User;
 use App\Status;
-use App\
+//use App\
 use Helper;
 
 class SearchRequestController extends Controller
 {
     public function __construct()
     {
+        
         //$this->middleware('auth');
     }
     public function afficher(){
@@ -24,7 +25,7 @@ class SearchRequestController extends Controller
     }
     public function showrequestaccordionformat()
     {
-        
+       
         if (isset($_GET['got']) && !empty($_GET['got']))
 	    {
             if ($_GET['got'] == "list")
@@ -103,6 +104,7 @@ class SearchRequestController extends Controller
             }
             else if ($_GET['got'] == "sublist")
             {
+                
                 //$sql = "SELECT * FROM lte_accordion WHERE accordion_id = '".$_POST['id']."' LIMIT 1";
                 $id = $_POST['id'];
                 $datasql = DB::table('requestwfs')
@@ -159,7 +161,7 @@ class SearchRequestController extends Controller
                         
                         } 
                         //Get liste traitement par demande
-                        getListProcessAchievementByrequesId($idrequest)
+                        //getListProcessAchievementByrequesId($idrequest)
                         //$zlibelletool = 'ici test';
                         $data['tpl'] = '<div class="mailbox-read-info pt-0 pl-3 pr-3">
                                
@@ -291,7 +293,7 @@ class SearchRequestController extends Controller
     }//===================end showrequest format accordeon========================//
     public function showrequestaccordionformatmulticritere()
     {
-
+       
         if (isset($_GET['got']) && !empty($_GET['got']))
 	    {
             if ($_GET['got'] == "list")

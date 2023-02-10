@@ -11,6 +11,7 @@ use App\Helpers\Helper as Helper;
 
 use App\Tool;
 use App\Requestwf;
+use App\Processing;
 use App\Request_history;
 use App\User;
 use App\validation_request;
@@ -36,19 +37,7 @@ class ProcessingController extends Controller
     {
         $data = DB::table('entities')->orderBy('name','asc')->get();
         
-            $ListRequestProcessing = DB::table('processings')
-            ->join('requestwfs','requestwfs.id','=','processings.requestwf_id')
-            ->join('type_requests','type_requests.id', '=', 'requestwfs.type_request_id')
-            ->join('tools','tools.id', '=', 'requestwfs.tool_id')
-            ->select('requestwfs.id as idrequest','processings.id as idprocessings','processings.is_finished as is_finished','requestwfs.subject as Objetwf',
-            'requestwfs.user_id as usersourceid','tools.name as toolname','tools.id as idtool','type_requests.id as idtyperequest',
-            'type_requests.name as type_requestname',
-            'requestwfs.created_at as created_at')
-            ->where('processings.is_finished','=',0)
-            ->orWhere('processings.is_finished','=',2)
-            ->orderBy('processings.id','DESC')
-            ->get();       
-            
+            $ListRequestProcessing = Processing::getListProcessingByUserId(Session::get('s_userid')) ;
             
             
             //remove the ',' at the end of the variable;
