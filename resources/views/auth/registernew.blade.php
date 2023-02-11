@@ -280,6 +280,17 @@
         });
         function testFormulaire()
         {
+            var iFileSizeMega = 0 ;
+            var oElementFile = $('#image') ;
+            if($('#image').val() != "")
+            {
+                var oElementFileFiles = oElementFile[0].files ;
+                var iFileSize = parseInt(oElementFileFiles[0].size) ;
+                iFileSizeMega = iFileSize / 1024 / 1024 ;
+                console.log(iFileSizeMega) ;
+            }
+            
+           // return false ;
             //var bRetour         = true ;
             var zMessageErreur  = '' ;
             var zImage = $('#image').val() ;
@@ -287,6 +298,10 @@
             if(zImage == '')
             {
                 zMessageErreur += '<br/>La photo est obligatoire' ;
+            }
+            if(zImage != '' && iFileSizeMega >= 2)
+            {
+                zMessageErreur += '<br/>La photo ne devrait pas avoir plus de 2Mégas' ;
             }
             if($('#name').val() == '')
             {

@@ -415,10 +415,10 @@ class UserController extends Controller
                 DB::table('users')
                 ->where('id', $id)
                 ->update(['name'=>request('name'), 'email'=>request('email'), 
-                'entity_id'=>request('entity_id'), 'activated'=>$request->has('activated'), 
-                'administrator'=>$request->has('administrator'), 
-                'validator'=>$request->has('validator'), 
-                'answering'=>$request->has('answering'),
+                'entity_id'=>request('entity_id'), 'activated'=>request('activated'), 
+                'administrator'=>request('administrator'), 
+                'validator'=>request('validator'), 
+                'answering'=>request('answering'),
                 'image' =>$image_name,
                 'password'=>Hash::make(request('password'))
                 ]);

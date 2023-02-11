@@ -8,7 +8,7 @@ use App\type_request;
 use App\Tool;
 use App\User;
 use App\Status;
-//use App\
+use App\Process_achievement;
 use Helper;
 
 class SearchRequestController extends Controller
@@ -160,6 +160,77 @@ class SearchRequestController extends Controller
                             
                         
                         } 
+                        $toProcessAchievement = Process_achievement::getListProcessAchievementByrequesId($oreq->id) ;
+                        /*
+                        echo '<pre>' ;
+                        print_r($toProcessAchievement) ;
+                        echo '</pre>' ;
+                        */
+                        $zContenuBoucleTraitement = '' ;
+                        $iNombreTraitement = 0 ;
+                        
+                        foreach($toProcessAchievement as $oProcessAchievement)
+                        {
+                            $iNombreTraitement ++ ;
+                            $zpiecesjointesoulettretraitement = '' ;
+                            
+                            $target_process = public_path().'/docrequest/'.$oreq->id.'/dossier_traitement/' . $oProcessAchievement->achievementid . '/' ;
+                            if(is_dir($target_process) && file_exists($target_process))
+                            {
+                                $files = scandir("$target_process");
+                                $ziconfile = "";
+                               
+                                
+                                foreach($files as $file) { 
+                                    if (in_array($file, array(".",".."))) continue;
+                                    $tzPathInfo = pathinfo($file) ;
+                                    $zLien = '' ;
+                                    if($tzPathInfo['extension'] != 'jpeg' && $tzPathInfo['extension'] != 'png' && $tzPathInfo['extension'] != 'jpg')
+                                    {
+                                        $ziconfile = Helper::getFileIcon($file);
+                                        $zFileSizeWithUnit = Helper::filesize_formatted($target_process.$file);
+                                        $zLien = '<a href="docrequest/'.$oreq->id.'/dossier_traitement/' . $oProcessAchievement->achievementid .'/'.$file.'" class="btn btn-default btn-xs link-download d-inline-block" title="Télécharger" target="blank"><i class="fas fa-download"></i></a>' ;
+                                    }
+                                    else
+                                    {
+                                        $ziconfile = '<img class="pj-icon" src="docrequest/'.$oreq->id.'/dossier_traitement/' . $oProcessAchievement->achievementid .'/'.$file . '" alt="JPG">' ;
+                                        $zLien .= '<a href="docrequest/'.$oreq->id.'/dossier_traitement/' . $oProcessAchievement->achievementid .'/'.$file . '" class="btn btn-default btn-xs float-right link-view ml-1" title="Voir" data-toggle="lightbox" data-title="' . $file . '" data-gallery="gallery"><i class="fas fa-eye"></i></a>' ;
+                                        $zLien .= '<a href="' . public_path() .'/docrequest/'.$oreq->id.'/dossier_traitement/' . $oProcessAchievement->achievementid .'/'.$file . '" class="btn btn-default btn-xs link-download d-inline-block" title="Télécharger" target="blank"><i class="fas fa-download"></i></a>' ;
+                                    }
+                                    
+                                    
+
+                                    $zpiecesjointesoulettretraitement .= 
+                                    '<div class="d-block pj-data text-left">
+                                                <label class="pj-content d-inline-block">
+                                                ' . $ziconfile . '
+                                                <span class="pj-name ml-1">'.$file.'</span>
+                                                </label>
+                                                ' . $zLien . '
+                                            </div>' ;
+                                            
+                                    
+                                    
+                                
+                                } 
+                                
+                                
+                            }
+                            
+                            $zActeur = User::getNameUserbyId($oProcessAchievement->achievementiduser) ;
+                            //$zActeur = 'Rakoto' ;
+                            $zContenuBoucleTraitement .= 
+                                '<tr>
+                                    <td>' . $iNombreTraitement . '</td>
+                                    <td>' . $zActeur . '</td>
+                                    <td>' . $oProcessAchievement->achievementcomment . '</td>
+                                    <td>' . $oProcessAchievement->achievementdate . '</td>
+                                    <td>
+                                        ' . $zpiecesjointesoulettretraitement . '
+                                    </td>
+                                </tr>' ;
+
+                        }
                         //Get liste traitement par demande
                         //getListProcessAchievementByrequesId($idrequest)
                         //$zlibelletool = 'ici test';
@@ -221,65 +292,15 @@ class SearchRequestController extends Controller
                             <table class="table table-bordered mx-auto w-100">
                                 <thead>
                                 <tr>
+                                    <th>N°</th>
+                                    <th>Acteur</th>
                                     <th>Déscription</th>
                                     <th>Date</th>
                                     <th>Pièces jointes</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr>
-                                    <td>Il y a encore quelques tâches à faire</td>
-                                    <td>14/06/2022</td>
-                                    <td>
-                                    <div class="d-block pj-data text-left">
-                                        <label class="pj-content d-inline-block">
-                                        <img class="pj-icon" src="assets_template/dist/img/icons/icon-pdf.png" alt="PDF">
-                                        <span class="pj-name ml-1">Lettre_3.pdf</span>
-                                        </label>
-                                        <a href="assets_template/dist/pj/Lettre_3.pdf" class="btn btn-default btn-xs link-download d-inline-block" title="Télécharger" target="blank"><i class="fas fa-download"></i></a>
-                                    </div>
-                                    <div class="d-block pj-data text-left">
-                                        <label class="pj-content d-inline-block">
-                                        <img class="pj-icon" src="assets_template/dist/img/icons/icon-xlsx.png" alt="XLSX">
-                                        <span class="pj-name ml-1">Template_Guest_Invitations_V4.xlsx</span>
-                                        </label>
-                                        <a href="assets_template/dist/pj/Template_Guest_Invitations_V4.xlsx" class="btn btn-default btn-xs link-download d-inline-block" title="Télécharger" target="blank"><i class="fas fa-download"></i></a>
-                                    </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Suite traitement</td>
-                                    <td>14/06/2022</td>
-                                    <td>
-                                    <div class="d-block pj-data text-left">
-                                        <label class="pj-content d-inline-block">
-                                        <img class="pj-icon" src="assets_template/dist/img/icons/icon-doc.png" alt="DOC">
-                                        <span class="pj-name ml-1">Lettre_3.doc</span>
-                                        </label>
-                                        <a href="assets_template/dist/pj/Lettre_3.doc" class="btn btn-default btn-xs link-download d-inline-block" title="Télécharger" target="blank"><i class="fas fa-download"></i></a>
-                                    </div>
-                                    </td>
-                                </tr><tr>
-                                    <td>Votre traitement est terminé</td>
-                                    <td>15/06/2022</td>
-                                    <td>
-                                    <div class="d-block pj-data text-left">
-                                        <label class="pj-content d-inline-block">
-                                        <img class="pj-icon" src="assets_template/dist/img/icons/icon-pdf.png" alt="PDF">
-                                        <span class="pj-name ml-1">fr-troublesbipolaires.pdf</span>
-                                        </label>
-                                        <a href="assets_template/dist/pj/fr-troublesbipolaires.pdf" class="btn btn-default btn-xs link-download d-inline-block" title="Télécharger" target="blank"><i class="fas fa-download"></i></a>
-                                    </div>
-                                    <div class="d-block pj-data text-left">
-                                        <label class="pj-content d-inline-block">
-                                        <img class="pj-icon" src="assets_template/dist/pj/This-image.jpg" alt="JPG">
-                                        <span class="pj-name ml-1">This-image.jpg</span>
-                                        </label>
-                                        <a href="assets_template/dist/pj/This-image.jpg" class="btn btn-default btn-xs float-right link-view ml-1" title="Voir" data-toggle="lightbox" data-title="This-image.jpg" data-gallery="gallery"><i class="fas fa-eye"></i></a>
-                                        <a href="assets_template/dist/pj/This-image.jpg" class="btn btn-default btn-xs link-download d-inline-block" title="Télécharger" target="blank"><i class="fas fa-download"></i></a>
-                                    </div>
-                                    </td>
-                                </tr>
+                                    ' . $zContenuBoucleTraitement . '
                                 </tbody>
                             </table>
                             </div>';

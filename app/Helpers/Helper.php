@@ -118,6 +118,11 @@
         $zimgicon = "";
         $zextension = "";
         $path_info = pathinfo($namefile);
+        /*
+        echo '<pre>' ;
+        print_r($path_info) ;
+        echo '</pre>' ;
+        */
         $zextension = $path_info['extension'];
 
         if($zextension == "pdf"){
@@ -131,9 +136,17 @@
         if($zextension == "doc"){
             $zimgicon = '<span class="mailbox-attachment-icon"><img class="icon" src="assets_template/dist/img/icons/icon-doc.png" alt="DOC"></span>';
         }  
+        /*
         if($zextension == "jpg"){
             $zimgicon = '<span class="mailbox-attachment-icon"><img class="icon" src="assets_template/dist/pj/'.$namefile.'" alt="JPG"></span>';
         }
+        if($zextension == "jpeg"){
+            $zimgicon = '<span class="mailbox-attachment-icon"><img class="icon" src="assets_template/dist/pj/'.$namefile.'" alt="JPG"></span>';
+        }
+        if($zextension == "png"){
+            $zimgicon = '<span class="mailbox-attachment-icon"><img class="icon" src="assets_template/dist/pj/'.$namefile.'" alt="JPG"></span>';
+        }
+        */
         
         return $zimgicon;
 

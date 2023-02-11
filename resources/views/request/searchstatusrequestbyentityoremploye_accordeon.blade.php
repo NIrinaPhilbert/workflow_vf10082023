@@ -325,7 +325,7 @@ function loadSubRequest(_this, id) {
 	        	arrangePJ()
 	        },
 	        error: function(data) {
-	            alert("Error!!! Something wrong.")
+	            alert("==>Error!!! Something wrong.")
 	        }
 	    });
 		
