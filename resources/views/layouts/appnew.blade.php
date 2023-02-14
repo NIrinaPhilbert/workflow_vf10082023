@@ -146,7 +146,7 @@
         <a class="nav-link dropdown-toggle" data-toggle="dropdown"  href="javascript:void(0);" onclick="$('#demande_submenu').slideToggle() ;$('#parametre_submenu').slideUp() ;">Demande</a>
 		<div class="dropdown-menu" id="demande_submenu">
 			<a class="dropdown-item" href="request/{{ Session::get('s_entityid_user') }}">Demande envoyé</a>
-			<a class="dropdown-item" href="#">Demande en attente validation</a>
+      <a class="dropdown-item" href="<?php $vSessionEntityUser=Session::get('s_entityid_user'); echo url("pendingrequest/{$vSessionEntityUser}");?>" class="nav-link active <?php if(strpos($_SERVER['REQUEST_URI'], '/pendingrequest') !== false){?> linkActive <?php } ?>">Demande en attente validation</a>
 			<a class="dropdown-item" href="#">Demande en attente traitement</a>
       <a class="dropdown-item" href="#">Recherche demande</a>
 			
@@ -274,7 +274,7 @@
             <a href="<?php $vSessionEntityUser=Session::get('s_entityid_user'); echo url("searchrequest");?>" class="nav-link active <?php if(strpos($_SERVER['REQUEST_URI'], '/searchrequest') !== false){?> linkActive <?php } ?>">
               <i class="nav-icon fas fa-list"></i>
               <p>
-                Recherche demande pour detail
+                Consultation détail demande
               </p>
             </a>
           </li>
