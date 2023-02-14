@@ -618,6 +618,8 @@ class UserController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function inscription(){
+        echo 'ici';
+        exit();
         $entities = Entity::with('entity')->orderBy('name', 'ASC')->get();
         $listentitetutelle = DB::table('entities')
         ->where('level_id','=',1)
