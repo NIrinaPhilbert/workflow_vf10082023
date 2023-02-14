@@ -621,7 +621,9 @@ class UserController extends Controller
         
         //$entities = Entity::with('entity')->orderBy('name', 'ASC')->get();
         //$entities = DB::table('entities')->orderBy('name', 'ASC')->get();
-        
+        $listeentite = DB::table('entities')->orderBy('name', 'ASC')->get();
+        echo 'ici';
+        exit();
         $listentitetutelle = DB::table('entities')
         ->where('level_id','=',1)
         ->orWhere('level_id','=',2)
@@ -629,8 +631,7 @@ class UserController extends Controller
         ->orWhere('level_id','=',4)
         ->orWhere('level_id','=',6)
         ->orderBy('name','asc')->get();
-        echo 'ici';
-        exit();
+        
         $typeentity = DB::table('level')
         ->orderBy('name','asc')->get();
         return view('auth.registernew',compact('entities','listentitetutelle','typeentity'));
