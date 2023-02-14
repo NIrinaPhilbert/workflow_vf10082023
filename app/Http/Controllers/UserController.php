@@ -619,12 +619,8 @@ class UserController extends Controller
      */
     public function inscription(){
         
-        //$entities = Entity::with('entity')->orderBy('name', 'ASC')->get();
-        //$entities = DB::table('entities')->orderBy('name', 'ASC')->get();
-        //$listeentite = DB::table('entities')->orderBy('name', 'ASC')->get();
-        $data = Entity::with('entity')->orderBy('name', 'ASC')->get();
-        echo 'ici2';
-        exit();
+        $entities = Entity::with('entity')->orderBy('name', 'ASC')->get();
+        
         $listentitetutelle = DB::table('entities')
         ->where('level_id','=',1)
         ->orWhere('level_id','=',2)
