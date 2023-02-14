@@ -621,8 +621,9 @@ class UserController extends Controller
         
         //$entities = Entity::with('entity')->orderBy('name', 'ASC')->get();
         //$entities = DB::table('entities')->orderBy('name', 'ASC')->get();
-        $listeentite = DB::table('entities')->orderBy('name', 'ASC')->get();
-        echo 'ici';
+        //$listeentite = DB::table('entities')->orderBy('name', 'ASC')->get();
+        $data = Entity::with('entity')->orderBy('name', 'ASC')->get();
+        echo 'ici2';
         exit();
         $listentitetutelle = DB::table('entities')
         ->where('level_id','=',1)
