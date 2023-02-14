@@ -619,7 +619,7 @@ class UserController extends Controller
      */
     public function inscription(){
         
-        $entities = Entity::with('entity')->orderBy('name', 'ASC')->get();
+        //$entities = Entity::with('entity')->orderBy('name', 'ASC')->get();
         echo 'ici';
         exit();
         $listentitetutelle = DB::table('entities')
