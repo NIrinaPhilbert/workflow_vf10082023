@@ -8,7 +8,7 @@
         <div class="row mb-0">
           <div class="col">
            
-            <a href="/client/create" class="btn btn-info">Liste demande</a>
+            
           </div>
           <div class="col">
           

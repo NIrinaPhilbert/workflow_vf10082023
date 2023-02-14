@@ -8,14 +8,14 @@
         <div class="row mb-0">
           <div class="col-lg-4">
            
-            <a href="/client/create" class="btn btn-info">Liste demande en attente traitement</a>
+            
           </div>
          
           <div class="col-lg-6">
           
           </div>
           <div class="col-lg-2">
-          <a href="<?php $vSessionEntityUser=Session::get('s_entityid_user'); echo url("/request");?>" class="btn btn-primary">Retour</a>
+          
           </div>
           
           <!-- /.col -->
