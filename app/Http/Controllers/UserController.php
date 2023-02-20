@@ -627,7 +627,6 @@ class UserController extends Controller
         ->orWhere('level_id','=',3)
         ->orWhere('level_id','=',4)
         ->orWhere('level_id','=',6)
-        ->orWhere('level_id','=',7)
         ->orderBy('name','asc')->get();
         
         $typeentity = DB::table('level')
