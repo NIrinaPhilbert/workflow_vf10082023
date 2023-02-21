@@ -60,6 +60,7 @@
                     <tr>
                       <th>ID</th>
                       <th>Name</>
+                      <th>Utilisé</>
                       <th>Actions</th>
                     </tr>
                     </thead>
@@ -68,6 +69,7 @@
                       <tr class="item-tr">
                         <td><a href="tool/view/{{ $tool->id }}">{{ $tool->id }}</a></td>
                         <td>{{ $tool->name }}</td>
+                        <td>{{ Helper::setOuiNon($tool->status) }}</td>
                         <td>
                           <a href="tool/view/{{ $tool->id }}"><i class="fas fa-eye text-primary"></i></a>
                           <a href="tool/edit/{{ $tool->id }}"><i class="fas fa-edit ml-1 text-secondary"></i></a>

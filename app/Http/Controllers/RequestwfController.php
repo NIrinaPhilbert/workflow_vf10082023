@@ -279,7 +279,10 @@ class RequestwfController extends Controller
     {
        // $id = Auth::id();
        
-       $tools = DB::table('tools')->orderBy('name','asc')->get();
+       $tools = DB::table('tools')
+       ->where('tools.status','=',1)
+       ->orderBy('name','asc')
+       ->get();
         //print_r($tools);
         //exit();
         return view('request.create',['tools' => $tools]);

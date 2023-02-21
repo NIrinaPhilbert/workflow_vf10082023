@@ -47,6 +47,19 @@
                                                             <label class="w-100">Description outil</label>
                                                             <textarea id="description" class="form-control" name="description">{{ $oTool->description }}</textarea>
                                                         </div>
+                                                        <div class="input-group mb-3">
+                                                            <label class="w-100">Utilisé dans le système</label>
+                                                                <div class="form-check form-check-inline">
+                                                                    <input class="form-check-input" type="radio" name="status" id="toolstatusyes" value="1" <?php if($oTool->status == 1) echo 'checked'?>>
+                                                                    <label class="form-check-label" for="inlineRadio1">Oui</label>
+                                                                </div>
+                                                                <div class="form-check form-check-inline">
+                                                                    <input class="form-check-input" type="radio" name="status" id="toolstatusno" value="0" <?php if($oTool->status == 0) echo 'checked'?>>
+                                                                    <label class="form-check-label" for="inlineRadio2">Non</label>
+                                                                </div>
+                                                            
+                                                            
+                                                        </div>
                                                          
                                                 </div>
                                             </div>

@@ -185,7 +185,8 @@ class ToolController extends Controller
         $id = request('id_tool');
         $name = request('name');
         $description = request('description');
-        Tool::where('id',$id)->update(array('name'=>$name,'description'=>$description));
+        $status = request('status');
+        Tool::where('id',$id)->update(array('name'=>$name,'description'=>$description,'status'=>$status));
         return redirect('tooldatatable')->with('message_info','Enregistrement outil effectue avec succÃ©s.');
 
     }
