@@ -79,6 +79,7 @@
                       <th>Entite</th>
                       <th>Fonction</th>
                       <th>Activé</th>
+                      <th>Compte temporaire</th>
                       <th>Administrateur</th>
                       <th>Repondeur</th>
                       <th>Valideur</th>
@@ -90,6 +91,7 @@
                       <?php 
                         foreach($dataUser as $user) {
                           $zValActivation = Helper::setOuiNon($user->activated);
+                          $zValCompteTemp = Helper::setOuiNon($user->istemp);
                           $zValAdministration = Helper::setOuiNon($user->administrator);
                           $zValRepondeur = Helper::setOuiNon($user->answering);
                           $zValValideur = Helper::setOuiNon($user->validator);
@@ -113,6 +115,7 @@
                         <td><?php $zEntity = App\Entity::getNameEntityById($user->entity_id); echo $zEntity?></td>
                         <td>{{$user->function}}</td>
                         <td>{{$zValActivation}}</td>
+                        <td>{{$zValCompteTemp}}</td>
                         <td>{{$zValAdministration}}</td>
                         <td>{{$zValRepondeur}}</td>
                         <td>{{$zValValideur}}</td>
