@@ -217,6 +217,7 @@
                                         
                                         <!--<button class="btn btn-primary" type="submit">ENVOYER DEMANDE</button>
                                         <button class="ml-1 btn btn-secondary" type="reset">CANCEL</button>-->
+                                        <img id="loader-save" src="assets_template/dist/img/loader.gif" style="width:50px;display:none;"/>
                                         <button class="btn btn-primary" id="btn-save" style="display: none;">ENVOYER DEMANDE</button>
                                         <button class="ml-1 btn btn-secondary" id="btn-reset">CANCEL</button>
                                     </div>
@@ -417,12 +418,17 @@ $("#mymaincontent").delegate("#type_request_id", 'change', function() {
       },
       type: 'ajax',
       method: 'put',
-      url: "/request/save",
+      //url: "/request/save",
+      url: "/sendrequest/save",
       data: form.serialize()+"&filenames="+filenames,
       
       //dataType: 'json',
       dataType: 'text',
       async: true,
+      beforeSend: function(){
+        $('#loader-save').show() ;
+        $('#btn-save').hide() ;
+      },
       success: function(data){
         //alert(data);
         console.log(data);

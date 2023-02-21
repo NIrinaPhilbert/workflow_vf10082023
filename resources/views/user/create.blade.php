@@ -17,6 +17,8 @@
                             <p></p>
                             <div class="card">
                                 <div class="card-header">
+                                    <a onclick="history.go(-1);" href="javascript:void(0);" style="float:right;">Retour</a>
+                                    &nbsp;
                                     <h3 class="card-title">Création utilisateur</h3>
                                 </div>
                                 <!-- /.card-header -->
