@@ -31,9 +31,9 @@ public function index(){
         //echo $iNombreJoursMaxValidation ;
         //exit() ;
         
-        $zQueryRequestNonValides = "SELECT * FROM requestwfs WHERE (requestwfs.status_id <> 3 OR requestwfs.status_id <> 4) AND NOW() > DATE_ADD(created_at, INTERVAL " . $iNombreJoursMaxValidation . " DAY)" ;
+        $zQueryRequestNonValides = "SELECT * FROM requestwfs WHERE NOT IN (3,4) AND NOW() > DATE_ADD(created_at, INTERVAL " . $iNombreJoursMaxValidation . " DAY)" ;
         $toRequestNonValides = DB::select($zQueryRequestNonValides) ;
-       //echo $zQueryRequestNonValides . '<br/>';
+       
         
         foreach($toRequestNonValides as $oRequestNonValide){
             $iRequestId = $oRequestNonValide->id ;
