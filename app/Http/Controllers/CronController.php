@@ -31,7 +31,7 @@ public function index(){
         //echo $iNombreJoursMaxValidation ;
         //exit() ;
         
-        $zQueryRequestNonValides = "SELECT * FROM requestwfs WHERE NOT IN (3,4) AND NOW() > DATE_ADD(created_at, INTERVAL " . $iNombreJoursMaxValidation . " DAY)" ;
+        $zQueryRequestNonValides = "SELECT * FROM requestwfs WHERE status_id NOT IN (3,4) AND NOW() > DATE_ADD(created_at, INTERVAL " . $iNombreJoursMaxValidation . " DAY)" ;
         $toRequestNonValides = DB::select($zQueryRequestNonValides) ;
        
         
@@ -82,7 +82,7 @@ public function index(){
         //echo $iNombreJoursMaxValidation ;
         //exit() ;
         
-        $zQueryRequestNonTraites = "SELECT * FROM processings WHERE is_finished <> 1 AND NOW() > DATE_ADD(created_at, INTERVAL " . $iNombreJoursMaxTraitement . " DAY)" ;
+        $zQueryRequestNonTraites = "SELECT * FROM processings WHERE is_finished NOT IN (1) AND NOW() > DATE_ADD(created_at, INTERVAL " . $iNombreJoursMaxTraitement . " DAY)" ;
         $toRequestNonTraites = DB::select($zQueryRequestNonTraites) ;
        //echo $zQueryRequestNonValides . '<br/>';
         
@@ -118,8 +118,9 @@ public function index(){
         }
     }
     public function cronactivation(){
+        //rappel activation compte
         $iNombreJoursMaxActivation = config('constants.NOMBRE_JOUR_MAX_ACTIVATION_USER') ;
-        $zQueryUtilisateursNonActives = "SELECT * FROM users WHERE activated <> 1 AND NOW() > DATE_ADD(created_at, INTERVAL " . $iNombreJoursMaxActivation . " DAY)" ;
+        $zQueryUtilisateursNonActives = "SELECT * FROM users WHERE activated NOT IN (1) AND NOW() > DATE_ADD(created_at, INTERVAL " . $iNombreJoursMaxActivation . " DAY)" ;
         $toRequestUtilisateursNonActives = DB::select($zQueryUtilisateursNonActives) ;
         foreach($toRequestUtilisateursNonActives as $oUtilisateursNonActives){
             $zUtilisateurNonActiveEntite = User::getEntityNameByUserId($oUtilisateursNonActives->id);

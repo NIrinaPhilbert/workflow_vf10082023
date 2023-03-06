@@ -401,7 +401,8 @@
                         context:document.body,
                         async:true,
                         success: function (data) {
-                            window.location = urlnextpage;
+                          console.log(data) ;
+                            //window.location = urlnextpage;
                             return data
                             },
                         error: function (data) {

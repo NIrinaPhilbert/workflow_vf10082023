@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Helpers\Helper as Helper;
-
+use Mail;
 use App\Tool;
 use App\Processing;
 use App\Requestwf;
@@ -114,7 +114,9 @@ class ProcessAchievementController extends Controller
         $process_status = $_POST['process_status'];
         $process_date = $_POST['process_date'];
         $comment_process = $_POST['comment_process'];
+        echo "status = 1";
         //si status traitement == 1
+        /*
         if($process_status == 1){//traitement fini immediat
 
             DB::table('processings')
@@ -146,8 +148,14 @@ class ProcessAchievementController extends Controller
                 'process_achievement_date' => $process_date
                 ]
             );
+        */
         //Création fichier
         //$delete[] = "";
+        
+        
+        $idprocessachievement = 100; //!!PROVISOIRE!!!//
+        //Helper::sendnotification_with_pj("wfnv@gmail.com","TEST ENVOI","TITRE DANS LE MESSAGE","Texte","contact@snis-sante.net", $tzFichier) ;
+        $tzFichier = array() ;
         if(file_exists(public_path()."/target-files-process/".$user_id."/")){
                 $target_dir_user = public_path()."/target-files-process/".$user_id."/";
                 $target_process = public_path()."/docrequest/".$idrequest."/dossier_traitement/".$idprocessachievement."/";
@@ -159,6 +167,7 @@ class ProcessAchievementController extends Controller
                     // If we copied this successfully, mark it for deletion
                     if (copy($target_dir_user.$file, $target_process.$file)) {
                         $delete[] = $target_dir_user.$file;
+                        $tzFichier[] = $target_process.$file ;
                     }
                 }
                 Helper::delTree($target_dir_user);
@@ -171,6 +180,23 @@ class ProcessAchievementController extends Controller
 
                 //fin création fichier
         }
+        $info = array(
+            'name' => "Alex"
+        );
+        Mail::send('mail', $info, function ($message)
+        {
+            $message->to('wfnvmail@gmail.com', 'W3SCHOOLS')
+                ->subject('Basic test eMail from W3schools.');
+            $message->from('sender@example.com', 'Alex');
+        });
+       /*
+        if(!mail('wfnvmail@gmail.com', 'sujet', 'message'))
+        {
+            echo 'erreur envoi' ;
+            exit() ;
+        }
+        */
+        //Helper::sendnotification_with_pj("wfnvmail@gmail.com","TEST ENVOI","TITRE DANS LE MESSAGE","Texte","contact@snis-sante.net", $tzFichier) ;
         echo "1";
 
         //===========================================================================================//
