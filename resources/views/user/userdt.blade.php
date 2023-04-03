@@ -1,6 +1,10 @@
 @extends('layouts.appnew')
 @section('content')
 <!-- Content Wrapper. Contains page content -->
+<style type="text/css">
+  #filtreUser{display:block;border:1px solid;padding:5px;border-radius:5px;margin-bottom:10px;}
+  #legendFiltreUser{width:15%!important;padding:5px;}
+</style>
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <div class="content-header">
@@ -66,6 +70,50 @@
                     <p>{{$message}}</p>
                   </div>
                   @endif
+                  <div class="container">
+                    <div class="col-md-12">
+                        <fieldset id="filtreUser">
+                          <legend id="legendFiltreUser">Filtrer par:</legend>
+                          <form method="get" id="frmFiltreUser" name="frmFiltreUser">
+                              <label>Administrateur</label>&nbsp;
+                              <select name="filtreAdministrateur" onchange="frmFiltreUser.submit();">
+                                  <option value="-1" <?php if(isset($_GET['filtreAdministrateur']) && $_GET['filtreAdministrateur'] == '-1'){ ?>selected="selected"<?php } ?>>All</option>
+                                  <option value="1" <?php if(isset($_GET['filtreAdministrateur']) && $_GET['filtreAdministrateur'] == 1){ ?>selected="selected"<?php } ?>>Oui</option>
+                                  <option value="0" <?php if(isset($_GET['filtreAdministrateur']) && $_GET['filtreAdministrateur'] == 0){ ?>selected="selected"<?php } ?>>Non</option>
+                                  
+                              </select>&nbsp;
+                              <label>Répondeur</label>&nbsp;
+                              <select name="filtreRepondeur" onchange="frmFiltreUser.submit();">
+                                  <option value="-1" <?php if(isset($_GET['filtreRepondeur']) && $_GET['filtreRepondeur'] == '-1'){ ?>selected="selected"<?php } ?>>All</option>
+                                  <option value="1" <?php if(isset($_GET['filtreRepondeur']) && $_GET['filtreRepondeur'] == 1){ ?>selected="selected"<?php } ?>>Oui</option>
+                                  <option value="0" <?php if(isset($_GET['filtreRepondeur']) && $_GET['filtreRepondeur'] == 0){ ?>selected="selected"<?php } ?>>Non</option>
+                                  
+                              </select>
+                              <label>Valideur</label>&nbsp;
+                              <select name="filtreValideur" onchange="frmFiltreUser.submit();">
+                                  <option value="-1" <?php if(isset($_GET['filtreValideur']) && $_GET['filtreValideur'] == '-1'){ ?>selected="selected"<?php } ?>>All</option>
+                                  <option value="1" <?php if(isset($_GET['filtreValideur']) && $_GET['filtreValideur'] == 1){ ?>selected="selected"<?php } ?>>Oui</option>
+                                  <option value="0" <?php if(isset($_GET['filtreValideur']) && $_GET['filtreValideur'] == 0){ ?>selected="selected"<?php } ?>>Non</option>
+                                  
+                              </select>
+                              <label>Activé</label>&nbsp;
+                              <select name="filtreActive" onchange="frmFiltreUser.submit();">
+                                  <option value="-1" <?php if(isset($_GET['filtreActive']) && $_GET['filtreActive'] == '-1'){ ?>selected="selected"<?php } ?>>All</option>
+                                  <option value="1" <?php if(isset($_GET['filtreActive']) && $_GET['filtreActive'] == 1){ ?>selected="selected"<?php } ?>>Oui</option>
+                                  <option value="0" <?php if(isset($_GET['filtreActive']) && $_GET['filtreActive'] == 0){ ?>selected="selected"<?php } ?>>Non</option>
+                                  
+                              </select>
+                              <label>Compte temporaire</label>&nbsp;
+                              <select name="filtreTemporaire" onchange="frmFiltreUser.submit();">
+                                  <option value="-1" <?php if(isset($_GET['filtreTemporaire']) && $_GET['filtreTemporaire'] == '-1'){ ?>selected="selected"<?php } ?>>All</option>
+                                  <option value="1" <?php if(isset($_GET['filtreTemporaire']) && $_GET['filtreTemporaire'] == 1){ ?>selected="selected"<?php } ?>>Oui</option>
+                                  <option value="0" <?php if(isset($_GET['filtreTemporaire']) && $_GET['filtreTemporaire'] == 0){ ?>selected="selected"<?php } ?>>Non</option>
+                                  
+                              </select>
+                          </form>
+                        </fieldset>
+                    </div>
+                  </div>
 
                   <table id="tblrequestsend" class="table table-bordered table-striped m-0">
                     <thead>

@@ -197,6 +197,13 @@ class User extends Authenticatable
         
         return $zContenuSelect;
     }
+    public static function getListUserByEntityId($iEntityId)
+    {
+        $ListUserbyentity = DB::table('users')
+        ->where('entity_id',$iEntityId)
+        ->get(); 
+        return $ListUserbyentity ;
+    }
 
     
 }

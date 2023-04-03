@@ -136,11 +136,14 @@ Route::get('viewdetailrequest/{id}','RequestwfController@viewdetailrequest');
 Route::get('request/list','RequestwfController@showlistrequest');
 Route::get('searchrequest','RequestwfController@searchrequest');
 Route::get('searchstatusrequestbyentity','RequestwfController@searchstatusrequestbyentity');
+Route::get('showavancementrequest','RequestwfController@showavancementrequest');
 Route::get('showprocessrequestbyentityoremp','RequestwfController@showprocessrequestbyentityoremp');
 Route::get('test','RequestwfController@test');
 //Route::get('cron','CronController@index');
 Route::post('showListRequestByStatusProcess','RequestwfController@showListRequestByStatusProcess');
 Route::post('showListRequestByStatus','RequestwfController@showListRequestByStatus');
+Route::post('/showlistavancementrequest','RequestwfController@showListAvancementRequest');
+
 
 // /*DropzoneJS
 Route::post('/request','RequestwfController@postData');

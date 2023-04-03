@@ -139,6 +139,7 @@ class ProcessAchievementController extends Controller
            
         }
         //insert into process
+        /*
             $idprocessachievement = DB::table('process_achievements')->insertGetId(
                 ['process_id' => $idprocess,
                 'user_id' => $user_id,
@@ -146,8 +147,11 @@ class ProcessAchievementController extends Controller
                 'process_achievement_date' => $process_date
                 ]
             );
+            */
+            $idprocessachievement = 100 ;
         //Création fichier
-        //$delete[] = "";
+        $delete[] = "";
+        $tzFichier = array() ;
         if(file_exists(public_path()."/target-files-process/".$user_id."/")){
                 $target_dir_user = public_path()."/target-files-process/".$user_id."/";
                 $target_process = public_path()."/docrequest/".$idrequest."/dossier_traitement/".$idprocessachievement."/";
@@ -159,9 +163,11 @@ class ProcessAchievementController extends Controller
                     // If we copied this successfully, mark it for deletion
                     if (copy($target_dir_user.$file, $target_process.$file)) {
                         $delete[] = $target_dir_user.$file;
+                        $tzFichier[] = $target_process.$file ;
                     }
                 }
                 Helper::delTree($target_dir_user);
+                Helper::sendnotification_with_pj("miorasemidsi@gmail.com","TEST ENVOI","TITRE DANS LE MESSAGE","Texte","contact@snis-sante.net", $tzFichier) ;
                 //traitement suppression dossier
                 //if(sizeof($delete) > 0){
                 /*foreach ($delete as $file) {
@@ -171,6 +177,28 @@ class ProcessAchievementController extends Controller
 
                 //fin création fichier
         }
+        /*
+        $to = "miorasemidsi@gmail.com" ;
+		$subject = "sujet" ;
+		
+		$headers = "Content-Type: text/plain; charset=utf-8\r\n" ;
+		$headers .= "From: volatafita@gmail.com\r\n" ;
+		
+		$message = "message statika be mihitsy sans header autre laravely" ;
+		
+		
+		
+		
+        if(mail($to, $subject, $message, $headers))
+		{
+			echo 'envoyé' ;
+		}
+		else
+		{
+			echo 'NON envoyé' ;
+		}
+        exit() ;
+        */
         echo "1";
 
         //===========================================================================================//

@@ -45,7 +45,7 @@ class UserController extends Controller
                 $subject = "Notification réinitialisation mots de passe dans le système workflow";
 
        
-                $zMessageNotification = "Votre compte workflow est actuellement reinitialisé Pour se connecter, veuillez cliquer sur le lien ".$zLienUpdateInitPassword." le compte Login: ".$zMail." et mots de passe: ".$zMdpTemp;
+                $zMessageNotification = "Votre compte workflow est actuellement reinitialisé. <br/> Pour se connecter, veuillez cliquer sur le lien ".$zLienUpdateInitPassword.". <br/> Le compte Login: ".$zMail." et mots de passe: ".$zMdpTemp;
                 Helper::sendnotification($zMail,$subject,$header,$zMessageNotification);
                 //return redirect('customresetpassword');
                 return redirect()->route('password.request');
@@ -406,7 +406,7 @@ class UserController extends Controller
             ->update(['name'=>request('name'), 'email'=>request('email'), 
             'entity_id'=>request('entity_id'), 'activated'=> request('activated'), 
             'administrator'=> request('administrator'), 'validator'=>request('validator'), 'image'=>$image_name, 'answering'=>request('answering')]);
-            Session::flash("message", "Mises à jour information utilisateur effectué avec succès");
+            Session::flash("message", "Mises à jour information de l'utilisateur " . request('name') . " effectué avec succès");
             Session::flash('alert-class', 'alert-success');
         }
         else{

@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Requestwf;
 use App\Request_history;
 use App\User;
+use App\Entity;
 use App\Process_User;
 use App\validation_request;
 use App\Requestwf_email_address;
@@ -703,6 +704,86 @@ class RequestwfController extends Controller
         return view('request.searchstatusrequestbyentity', compact('lrequests','ListTypeRequest','NumberRecordInit1'));
         
     }
+    public function showavancementrequest(){
+        $user_id    = Auth::id() ;
+        $user = User::find($user_id);
+        $bIsAdmin = ($user->administrator == 1) ? true : false ;
+        $toWhere[] = ['requestwfs.id', '>', '0'] ;
+        /*
+        echo '<pre>' ;
+        print_r($user) ;
+        echo '</pre>' ;
+        exit() ;
+        */
+        if($bIsAdmin)
+        {
+            //echo 'ici admin' ;
+            $lrequests = Requestwf::getListAllRequestForAdmin($toWhere);
+        }
+        else
+        {
+            
+            $ientityID  = $user->entity_id ;
+            $oEntite    = Entity::find($ientityID) ;
+            $bIsDrs     = ($oEntite->level_id == 6) ? true : false ;
+            $tiUserId   =  array($user_id) ;
+            if($bIsDrs)
+            {
+                //echo 'ici drs' ;
+                //à lui et ses enfants (districts)
+                //echo 'DRS <br/>' ;
+                //les User Id de même entité que lui
+                $toUserSameEntity = User::getListUserByEntityId($ientityID) ;
+                foreach($toUserSameEntity as $oUserSameEntity){
+                    if($user_id != $oUserSameEntity->id)
+                    {
+                        array_push($tiUserId, $oUserSameEntity->id) ;
+                    }                    
+                }
+                //Les Entités dont sont entité est parent avec level = 8 (district)
+                $toEntityChild = Entity::getListChildOfEntityByParentId($ientityID) ;
+                foreach($toEntityChild as $oEntityChild){
+                    $toUserPerEntity = User::getListUserByEntityId($oEntityChild->id) ;
+                    foreach($toUserPerEntity as $oUserPerEntity){
+                        array_push($tiUserId, $oUserPerEntity->id) ;
+                    }                   
+                }
+            }
+            /*
+            echo '<pre>' ;
+            print_r($tiUserId) ;
+            echo '</pre>' ;
+            */
+            $lrequests = Requestwf::getListAllRequestByListUsers($tiUserId,$toWhere);
+           
+        }
+        /*
+        echo '<pre>' ;
+        print_r($lrequests) ;
+        echo '</pre>' ;
+        exit() ;
+        */
+        $tiTypeRequestId = array() ;
+        foreach($lrequests as $oRequest)
+        {
+            array_push($tiTypeRequestId, $oRequest->type_request_id) ;
+        }
+        $ListTypeRequest = DB::Table('type_requests')
+        ->whereIn('id', $tiTypeRequestId)
+        ->orderBy('name','ASC')
+        ->get();
+        /*
+        echo '<pre>' ;
+        print_r($ListTypeRequest) ;
+        echo '</pre>' ;
+        exit() ;
+        */
+        $NumberRecordInit1 = $lrequests->count();
+        //echo $NumberRecordInit1;
+        //exit();
+        return view('request.showavancementrequest', compact('lrequests','ListTypeRequest','NumberRecordInit1'));
+        
+    }
     public function test(){
         $ListTypeRequest = DB::Table('type_requests')
         ->orderBy('name','ASC')
@@ -829,6 +910,97 @@ class RequestwfController extends Controller
         }
         
         echo $iNbreEnreg.'_'.$zRowListRequest;
+    }
+    public function showListAvancementRequest(){
+        $itypeRequestID = request('itypeRequestID') ;
+        $itoolID = request('itoolID');
+        $user_id    = Auth::id() ;
+        $user = User::find($user_id);
+        $bIsAdmin = ($user->administrator == 1) ? true : false ;
+        $toWhere[] = ['requestwfs.id', '>', '0'] ;
+        if($itypeRequestID)
+        {
+            $toWhere[] = ['requestwfs.type_request_id', '=', $itypeRequestID] ;
+        }
+        if($itoolID)
+        {
+            $toWhere[] = ['requestwfs.tool_id', '=', $itoolID] ;
+        }
+        /*
+        echo '<pre>' ;
+        print_r($user) ;
+        echo '</pre>' ;
+        exit() ;
+        */
+        if($bIsAdmin)
+        {
+            //echo 'ici admin' ;
+            $lrequests = Requestwf::getListAllRequestForAdmin($toWhere);
+        }
+        else
+        {
+            
+            $ientityID  = $user->entity_id ;
+            $oEntite    = Entity::find($ientityID) ;
+            $bIsDrs     = ($oEntite->level_id == 6) ? true : false ;
+            $tiUserId   =  array($user_id) ;
+            if($bIsDrs)
+            {
+                //echo 'ici drs' ;
+                //à lui et ses enfants (districts)
+                //echo 'DRS <br/>' ;
+                //les User Id de même entité que lui
+                $toUserSameEntity = User::getListUserByEntityId($ientityID) ;
+                foreach($toUserSameEntity as $oUserSameEntity){
+                    if($user_id != $oUserSameEntity->id)
+                    {
+                        array_push($tiUserId, $oUserSameEntity->id) ;
+                    }                    
+                }
+                //Les Entités dont sont entité est parent avec level = 8 (district)
+                $toEntityChild = Entity::getListChildOfEntityByParentId($ientityID) ;
+                foreach($toEntityChild as $oEntityChild){
+                    $toUserPerEntity = User::getListUserByEntityId($oEntityChild->id) ;
+                    foreach($toUserPerEntity as $oUserPerEntity){
+                        array_push($tiUserId, $oUserPerEntity->id) ;
+                    }                   
+                }
+            }
+            /*
+            echo '<pre>' ;
+            print_r($tiUserId) ;
+            echo '</pre>' ;
+            */
+            $lrequests = Requestwf::getListAllRequestByListUsers($tiUserId, $toWhere);
+           
+        }
+        $iNbreEnreg = sizeof($lrequests);
+        $zRowListRequest = "" ;
+        foreach($lrequests as $requestwf){
+            $zurl = url('suividemande/'.$requestwf->ID);
+            $zurlviewdetail = url('viewdetailrequest/'.$requestwf->ID);
+            $zRowListRequest .= '<tr class="item-tr">
+                <td><a href="">' . $requestwf->ID . '</td>
+                <td>' . $requestwf->Objet . '</td>
+                <td>' . $requestwf->type_requestname . '</td>
+                <td>' . $requestwf->toolname . '</td>
+                <td>' . $requestwf->status . '</td>
+                <td>' . $requestwf->created_at . '</td>
+                <td>' . $requestwf->username . ' (' . $requestwf->entity_name . ')</td>
+                <td><a href="' . $zurlviewdetail .'"><i class="fas fa-eye text-primary"></i></a>    
+                <a href="' .  $zurl .'" class="btn btn-info">voir historique demande</a>
+                                
+                </td>
+            </tr>';
+        }
+        /*
+        echo $iNbreEnreg . '<br/>' ;
+        echo '<pre>' ;
+        print_r($lrequests) ;
+        echo '</pre>' ;
+        exit() ;
+        */
+        echo $iNbreEnreg.'_'.$zRowListRequest ;
     }
     public function viewdetailrequest($id){
         //$queryDetailRequest = DB::table('');

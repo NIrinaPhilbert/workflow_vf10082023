@@ -96,5 +96,13 @@ class Entity extends Model
         
         return $zContenuSelect;
     }
+    public static function getListChildOfEntityByParentId($EntityParentID){
+
+        $ListEntity = DB::table('entities')
+        ->where('entities.entity_id',$EntityParentID)
+        ->get();   
+        return $ListEntity;
+       
+    }
    
 }

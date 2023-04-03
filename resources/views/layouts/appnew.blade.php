@@ -269,7 +269,7 @@
               </p>
             </a>
           </li>
-          
+          @can('create', App\User::class)
           <li class="nav-item">
             <a href="<?php $vSessionEntityUser=Session::get('s_entityid_user'); echo url("searchrequest");?>" class="nav-link active <?php if(strpos($_SERVER['REQUEST_URI'], '/searchrequest') !== false){?> linkActive <?php } ?>">
               <i class="nav-icon fas fa-list"></i>
@@ -278,7 +278,7 @@
               </p>
             </a>
           </li>
-          
+          @endcan
           @can('create', App\User::class)
           <li class="nav-item">
             <a href="<?php $vSessionEntityUser=Session::get('s_entityid_user'); echo url("searchstatusrequestbyentity");?>" class="nav-link active <?php if(strpos($_SERVER['REQUEST_URI'], '/searchstatusrequestbyentity') !== false){?> linkActive <?php } ?>">
@@ -301,6 +301,15 @@
             </a>
           </li>
           @endcan
+          <li class="nav-item">
+            <a href="<?php $vSessionEntityUser=Session::get('s_entityid_user'); echo url("showavancementrequest");?>" class="nav-link active <?php if(strpos($_SERVER['REQUEST_URI'], '/showavancementrequest') !== false){?> linkActive <?php } ?>">
+             
+            <i class="nav-icon fas fa-list"></i>
+              <p>
+                Avancement traitement de demande
+              </p>
+            </a>
+          </li>
           @can('create', App\User::class)
           <li class="nav-item">
             <a href="<?php echo url("userdatatable");?>" class="nav-link active <?php if(strpos($_SERVER['REQUEST_URI'], '/userdatatable') !== false){?> linkActive <?php } ?>">

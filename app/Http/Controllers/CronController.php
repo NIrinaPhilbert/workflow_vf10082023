@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\DB;
 use Helper;
 use App\User;
 use App\Requestwf;
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
 
 class CronController extends Controller
 {
@@ -68,14 +70,41 @@ public function index(){
 
     }
     public function sendmailrappel(){
+        /*
         phpinfo() ;
-        //exit() ;
-        $email_admin = 'randriamiaranirina@gmail.com';
+        */
+        Helper::testMailAutre() ;
+        exit() ;
+        
+        $email_admin = 'wfnvmail@gmail.com';
         $subjectm = 'Test mail pour cron';
         $header = 'header mail pour cron';
         $zMessageNotification = 'Mail de rappel pour vous';
         Helper::sendnotification($email_admin,$subjectm,$header,$zMessageNotification);
         echo "Mail envoyé";
+        exit() ;
+        /**/
+        require base_path("vendor/autoload.php") ;
+        $mail = new PHPMailer(true) ;
+        $mail->From = "wfnvmail@gmail.com";
+        $mail->FromName = "Full Name";
+
+        $mail->addAddress("miorasemidsi@gmail.com", "Recepient Name");
+
+        $mail->isHTML(true);
+
+        $mail->Subject = "Subject Text";
+        $mail->Body = "<i>Mail body in HTML LARAVELY</i>";
+        $mail->AltBody = "This is the plain text version of the email content";
+        $mail->addAttachment('C:/xampp/htdocs/workflowgitnew/public/docrequest/50/dossier_traitement/100/Demande compte d.docx'); // Ajouter un attachement
+
+        try {
+            $mail->send();
+            echo "Message has been sent successfully";
+        } catch (Exception $e) {
+            echo "Mailer Error: " . $mail->ErrorInfo;
+        }
+        
     }
     public function crontraitement(){
         $iNombreJoursMaxTraitement = config('constants.NOMBRE_JOUR_MAX_TRAITEMENT') ;

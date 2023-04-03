@@ -100,6 +100,44 @@ class Requestwf extends Model
 
     
     }
+    public static function getListAllRequestForAdmin($toWhere)
+    {        
+        $ListRequest = DB::table('requestwfs')
+        ->join('users','users.id', '=', 'requestwfs.user_id')
+        ->join('entities','entities.id', '=', 'users.entity_id')
+        ->join('tools','tools.id', '=', 'requestwfs.tool_id')
+        ->join('statuses','statuses.id', '=', 'requestwfs.status_id')
+        ->join('type_requests','type_requests.id', '=', 'requestwfs.type_request_id')
+        ->groupBy('requestwfs.id')
+        ->orderBy('requestwfs.id','DESC')
+        ->select('requestwfs.type_request_id as type_request_id', 'entities.name as entity_name','requestwfs.id as ID','requestwfs.subject as Objet','users.name as username','tools.name as toolname','type_requests.name as type_requestname','statuses.id as statusid','statuses.name as status','requestwfs.created_at as created_at')
+        ->where($toWhere)
+        ->get();   
+        
+       return $ListRequest;
+
+    
+    }
+    public static function getListAllRequestByListUsers($_tiUserId, $toWhere)
+    {
+        
+
+        $ListRequest = DB::table('requestwfs')
+        ->join('users','users.id', '=', 'requestwfs.user_id')
+        ->join('entities','entities.id', '=', 'users.entity_id')
+        ->join('tools','tools.id', '=', 'requestwfs.tool_id')
+        ->join('statuses','statuses.id', '=', 'requestwfs.status_id')
+        ->join('type_requests','type_requests.id', '=', 'requestwfs.type_request_id')
+        ->groupBy('requestwfs.id')
+        ->orderBy('requestwfs.id','DESC')
+        ->select('requestwfs.type_request_id as type_request_id','entities.name as entity_name','requestwfs.id as ID','requestwfs.subject as Objet','users.name as username','tools.name as toolname','type_requests.name as type_requestname','statuses.id as statusid','statuses.name as status','requestwfs.created_at as created_at')
+        ->whereIn('users.id', $_tiUserId)
+        ->where($toWhere)
+        ->get();   
+       return $ListRequest;
+  
+    }
+    
     public static function getListRequestByStatusProcess(){
         $ListRequest = DB::table('requestwfs')
         ->orderBy('requestwfs.id','DESC')

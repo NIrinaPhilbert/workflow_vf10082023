@@ -129,10 +129,11 @@
 				</tr>
 			</thead>
 			<tbody>
-				<tr>
+				<?php //echo $iNombreEnreg ; ?>
         <?php 
             for($ind = 1; $ind < $iNombreEnreg; $ind++) {
         ?>
+			<tr>
 					<td class="text-left"><?php echo $ind;?></td>
 					<td class="text-left"><?php echo $toRequestHistory[$ind]['etat'];?></td>
 					<td class="text-left"><?php echo $toRequestHistory[$ind]['acteur'];?></td>
@@ -140,6 +141,11 @@
 					<td class="text-left"><?php echo $toRequestHistory[$ind]['commentaire'];?></td>
 					<td class="text-left"><?php echo $toRequestHistory[$ind]['entite'];?></td>
 				</tr>
+				<?php } ?>
+				<?php if($iNombreEnreg == 1){ ?>
+					<tr>
+						<td class="text-left" colspan="6">Traitement non encore commencé pour cette demande</td>
+					</tr>
 				<?php } ?>
 			</tbody>
 		</table>
