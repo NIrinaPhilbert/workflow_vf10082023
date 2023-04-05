@@ -73,10 +73,10 @@ public function index(){
         /*
         phpinfo() ;
         */
-        
+        /* 
         Helper::testMailAutre() ;
         exit() ;
-        
+        */
         $email_admin = 'wfnvmail@gmail.com';
         $subjectm = 'Test mail pour cron';
         $header = 'header mail pour cron';

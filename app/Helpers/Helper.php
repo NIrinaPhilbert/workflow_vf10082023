@@ -123,7 +123,17 @@
 		$mail = new PHPMailer();
         $mail->From = "workflow@snis-sante.net" ;
         $mail->FromName = "Workflow";
-
+        if($_SERVER['HTTP_HOST'] == 'workflow.snis-sante.net')
+        {
+            $mail->SMTPDebug = 0 ;
+            $mail->isSMTP() ;
+            $mail->SMTPSecure = 'tls' ;
+            $mail->Host = 'email-smtp.eu-west-1.amazonaws.com' ;
+            $mail->SMTPAuth = true ;
+            $mail->Port = 587 ; 
+            $mail->Username = 'AKIAVFGAKM4ZXZXCZQNW' ;
+            $mail->Password = 'BH8OD3ClBnIO1hlBobj+fdrAnHW0rhHUjxKzehwVuuVy' ;
+        }
         $mail->addAddress($maildestinataire, "");
 
         $mail->isHTML(true);
