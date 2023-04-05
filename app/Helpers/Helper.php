@@ -145,16 +145,32 @@
     public static function testMailAutre()
     {
         require base_path('vendor/autoload.php') ;
-
+        /*
+        echo '<pre>' ;
+        print_r($_SERVER) ;
+        echo '</pre>' ;
+        exit() ;
+        */
 		$mail = new PHPMailer();
-        $mail->From = "distadista2@gmail.com" ;
+        $mail->From = "workflow@snis-sante.net" ;
         $mail->FromName = "Full Name";
+        if($_SERVER['HTTP_HOST'] == 'workflow.snis-sante.net')
+        {
+            $mail->SMTPDebug = 2 ;
+            $mail->isSMTP() ;
+            $mail->SMTPSecure = 'tls' ;
+            $mail->Host = 'email-smtp.eu-west-1.amazonaws.com' ;
+            $mail->SMTPAuth = true ;
+            $mail->Port = 587 ; 
+            $mail->Username = 'AKIAVFGAKM4ZXZXCZQNW' ;
+            $mail->Password = 'BH8OD3ClBnIO1hlBobj+fdrAnHW0rhHUjxKzehwVuuVy' ;
+        }
 
         $mail->addAddress("wfnvmail@gmail.Com", "Recepient Name");
 
         $mail->isHTML(true);
 
-        $mail->Subject = "sujet de test";
+        $mail->Subject = "sujet de test avec SMTP";
         $mail->Body = "<h3>Test</h3><b>Hello word!</b>"  ;
         $mail->AltBody = "This is the plain text version of the email content";
       
@@ -162,9 +178,9 @@
 
         try {
             $mail->send();
-            //echo "Message has been sent successfully";
+            echo "Message has been sent successfully";
         } catch (Exception $e) {
-            //echo "Mailer Error: " . $mail->ErrorInfo;
+            echo "Mailer Error: " . $mail->ErrorInfo;
         }
         exit() ;
     }

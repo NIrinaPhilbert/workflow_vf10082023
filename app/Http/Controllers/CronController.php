@@ -73,10 +73,7 @@ public function index(){
         /*
         phpinfo() ;
         */
-        echo '<pre>' ;
-        print_r($_SERVER) ;
-        echo '</pre>' ;
-        exit() ;
+        
         Helper::testMailAutre() ;
         exit() ;
         
