@@ -125,9 +125,7 @@
         $mail->FromName = "Workflow";
         if($_SERVER['HTTP_HOST'] == 'workflow.snis-sante.net')
         {
-            echo getenv('SMTP_HOST') ;
-            echo env('SMTP_HOST') ;
-            exit() ;
+            
             $zSMTPHost = getenv('SMTP_HOST') ;
             $zSMTPUsername = getenv('SMTP_Username') ;
             $zSMTPPassword = getenv('SMTP_Password') ; 
