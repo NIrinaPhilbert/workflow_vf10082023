@@ -208,9 +208,23 @@
         require base_path('vendor/autoload.php') ;
 
 		$mail = new PHPMailer();
-        $mail->From = $from ;
+        $mail->From = "workflow@snis-sante.net" ;
         $mail->FromName = "Full Name";
-
+        if($_SERVER['HTTP_HOST'] == 'workflow.snis-sante.net')
+        {
+            
+            $zSMTPHost = getenv('SMTP_HOST') ;
+            $zSMTPUsername = getenv('SMTP_Username') ;
+            $zSMTPPassword = getenv('SMTP_Password') ; 
+            $mail->SMTPDebug = 0 ;
+            $mail->isSMTP() ;
+            $mail->SMTPSecure = 'tls' ;
+            $mail->Host = $zSMTPHost ;
+            $mail->SMTPAuth = true ;
+            $mail->Port = 587 ; 
+            $mail->Username = $zSMTPUsername ;
+            $mail->Password = $zSMTPPassword ;
+        }
         $mail->addAddress($maildestinataire, "Recepient Name");
 
         $mail->isHTML(true);
