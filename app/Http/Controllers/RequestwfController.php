@@ -368,6 +368,18 @@ class RequestwfController extends Controller
 
         } 
 
+        //Envoi email vers le demandeur
+        //Get mail user sender
+        $oUserSender = User::find($user_id);
+        $zMailUserSender = $oUserSender->email;
+        $header = "Notification demande en attente de votre validation dans le système workflow";
+        $subjectm = "Notification demande en attente de votre validation dans le système workflow";
+        $zMessageNotification = "Votre demande ID ".$requestwf->id.", objet ".$subject." est actuellement en attente de validation dans le systeme workflow";
+        Helper::sendnotification($zMailUserSender,$subjectm,$header,$zMessageNotification);
+
+        
+        //Fin Envoi email vers le demandeur
+
 
         //==============================================================================//
       
@@ -398,7 +410,7 @@ class RequestwfController extends Controller
         $tool_id = $tzParam[2];
         $type_request_id = $tzParam[3];
         //Get mail user sender
-        $oUserSender = User::find($user_id);
+        $oUserSender = User::find($toRequestwf[0]->userid);
         $zMailUserSender = $oUserSender->email;
         // end get mail user sender
         $currentrank = validation_request::getCurrentRank($entityid_userconnected,$tool_id,$type_request_id);
@@ -438,8 +450,22 @@ class RequestwfController extends Controller
             );
             //=================Get enity remaining===================================================//
             $zentiterestant = validation_request::getRemainingEntityList($tool_id,$type_request_id,$currentrank,$maxrank);
-            //echo $zentiterestant;
-            //exit();
+            $oEntiteRestantsId = validation_request::getRemainingEntityId($tool_id,$type_request_id,$currentrank,$maxrank);
+                foreach($oEntiteRestantsId as $oEntiteRestant){
+                    $iEntiteRestantId = $oEntiteRestant->entity_id ;
+                    $oUsersParEntiteRestantId = User::getListUserByEntityId($iEntiteRestantId) ;
+                    foreach($oUsersParEntiteRestantId as $oUserParEntiteRestantId){
+                        $zEmailUserEntiteRestant = $oUserParEntiteRestantId->email ;
+                        //============Notification mail Utilisateur d'entite Restant===========//
+                        $header = "Demande en attente de votre validation" ;
+                        $subject = "Demande en attente de votre validation" ;
+                        $zMessageNotificationEntiteRestant = "La demande ID ".$request_id.", objet ".$zRequestNom." est actuellement en attente de votre validation dans le système workflow" ;
+                        Helper::sendnotification($zEmailUserEntiteRestant,$subject,$header,$zMessageNotificationEntiteRestant);
+                        //============Notification mail Utilisateur d'entite Restant===========//
+                    }
+                }
+
+
             //==================Notification mail destinataire=======================================//
             $header = "Notification validation demande dans le système workflow";
             $subject = "Notification validation demande système workflow";
@@ -451,8 +477,8 @@ class RequestwfController extends Controller
             ->where('requestwf_email_addresses.requestwf_id','=',$request_id)
             ->get();
             
-            $zUtilisateurDemandeurEntite = User::getEntityNameByUserId($user_id);
-            $zUtilisateurDemandeurNom = User::getNameUserbyId($user_id) ;
+            $zUtilisateurDemandeurEntite = User::getEntityNameByUserId($toRequestwf[0]->userid);
+            $zUtilisateurDemandeurNom = User::getNameUserbyId($toRequestwf[0]->userid) ;
             $zMessageNotificationOtherDestination = "La demande <b>" . $zRequestNom . "</b> de l'utilisateur <b> " . $zUtilisateurDemandeurNom . " </b> de l'entité <b>" . $zUtilisateurDemandeurEntite  . "</b> est actuellement approuvée au niveau de ".$zLibelleEntityValidator." par l'utilisateur ".$zNameUserValidator."<br> On attend encore la validation des entites: <b>".$zentiterestant."</b> avant le traitement";
             // Send mail notification for other destination
             foreach($QueryListeMailDestinationNotification as $omailaddress){
@@ -552,6 +578,8 @@ class RequestwfController extends Controller
         $entity_traitement_id = request('entity_id_resp');
         $entityidwithuserid = request('entityidwithuserid');
         $oEntityidwithuserid = json_decode($entityidwithuserid);
+
+        
         
        
         $req_histories = DB::table('request_histories')->where('id',$request_history_id)->first();
@@ -626,6 +654,30 @@ class RequestwfController extends Controller
 
 
         }
+        $zMailTitre = "Notification demande en attente de traitement" ;
+            $zMailContenu = "La demande <b>" . $zRequestNom . "</b> de l'utilisateur <b>" . $zDemandeurNom . "</b> de l'entité <b>" . $zDemandeurEntite . "</b> est en attente de traitement." ;
+        $QueryListeMailDestinationNotification = DB::table('requestwf_email_addresses')
+            ->join('reply_email_addresses','reply_email_addresses.id','=','requestwf_email_addresses.reply_email_address_id')
+            ->select('reply_email_addresses.rea_email as mailaddress')
+            ->where('requestwf_email_addresses.requestwf_id','=',$request_id)
+            ->get();
+        
+        // Send mail notification for other destination
+        foreach($QueryListeMailDestinationNotification as $omailaddress){
+            //echo "adresse_mail=".$mailaddress;
+            
+            
+
+             Helper::sendnotification($omailaddress->mailaddress,$zMailTitre,$zMailTitre,$zMailContenu) ;
+             sleep(2) ;
+
+        } 
+
+        //Get mail user sender
+        $oUserSender = User::find($toRequestwf[0]->userid);
+        $zMailUserSender = $oUserSender->email;
+        //Send mail user sender
+        Helper::sendnotification($zMailUserSender,$zMailTitre,$zMailTitre,$zMailContenu);
         
 
 

@@ -197,32 +197,39 @@ class UserController extends Controller
     public function store(Request $request)
     //public function mampiditra()
     {
+        
        $request->validate([
-        'name' => 'required'
-        //'image' => 'required|image|max:2048'
+        'name' => 'required',
+        'email' => 'required|unique:users|email',
+        'image' => 'required|image|max:2048',
+        'password' => 'required|confirmed|min:8',
+        'password_confirmation' => 'required',
        ]);
+       
        /*
-       request()->validate([
-        'email' => ['required', 'email'],
+       $request()->validate([
+        'email' => ['required', 'email', 'unique:posts'],
         'password' => ['required', 'confirmed', 'min:8'],
         'password_confirmation' => ['required'],
-        ]);*/
+        'name' => ['required'],
+        ]);
+        */
        $image = $request->file('image');
        $new_name = rand().'.'.$image->getClientOriginalExtension();
-       //echo $new_name;
-       //exit();
+       
        $target_image = public_path()."/images/";
         if (!file_exists($target_image)) mkdir($target_image, 0777, true);
        // $request->file->move('storage/',$filename);
        $image->move(public_path('images'),$new_name);
-
+       
         if(request('password_confirmation') == request('password'))
         {
-         
-            $user = new User();
             
+            //$user = new User();
+            /*
             $user->name = request('name');
             $user->email = request('email');
+            $user->function = request('function');
             $user->entity_id = request('entity_id');
             $user->activated = request('useractivation');
             $user->administrator = request('useradministrator');
@@ -230,7 +237,31 @@ class UserController extends Controller
             $user->answering = request('useranswering');
             $user->image = $new_name;
             $user->password = Hash::make(request('password'));
-            $user->save();
+            $user->phone = request('tel');
+            */
+            DB::table('users')->insert([
+                'name' => request('name'),
+                'email' =>request('email'),
+                'function' => request('function'),
+                'entity_id' => request('entity_id'),
+                'activated' => request('useractivation'),
+                'administrator' => request('useradministrator'),
+                'validator' => request('uservalidator'),
+                'answering' => request('useranswering'),
+                'image' => $new_name,
+                'password' => Hash::make(request('password')),
+                'phone' => request('tel')
+            ]) ;
+            /*
+            echo '<pre>' ;
+            print_r($user) ;
+            echo '</pre>' ;
+            exit() ;
+            */
+            
+            //$user->save();
+            //echo $new_name;
+       //exit();
         }
         $data = Entity::with('entity')->orderBy('name', 'ASC')->get();
         $dataUser = User::with('entity')->orderBy('id', 'DESC')->get();
@@ -357,10 +388,14 @@ class UserController extends Controller
         
         $entities = DB::table('entities')->orderBy('name','asc')->get();
         $user = User::find($id);
-        return view('user.edit', ['user' => $user],['entities' => $entities]);
+    
+        $oUserSession = User::find(Session::get('s_userid'));
+        $user->administrator_user_logged = $oUserSession->administrator;
+        return view('user.edit', ['user' => $user], ['entities' => $entities]);
     }
     public function enableuser($id)
     {
+        
         $user = User::find($id);
         $entities = DB::table('entities')->orderBy('name','asc')->get();
         return view('user.enable',['user' => $user],['entities' => $entities]);
@@ -449,6 +484,7 @@ class UserController extends Controller
     }
 
     public function setenable(Request $request, $id){
+        
         $user = User::find($id);
         $zLogin = $user->email;
         $zMdpTemp = rand().'@wf';
@@ -474,11 +510,12 @@ class UserController extends Controller
         
 
         //=======Notification mail utilisateur=============//
-        return redirect()->route('userdatatable');
+       // return redirect()->route('userdatatable');
         
         //return redirect()->route('enableuser',[$id]);
     }
     public function setdisable(Request $request, $id){
+        
         $user = User::find($id);
         $zLogin = $user->email;
         
@@ -496,7 +533,7 @@ class UserController extends Controller
         $zMessageNotification = "Votre compte workflow est actuellement desactivé";
         Helper::sendnotification($zLogin,$subject,$header,$zMessageNotification);
 
-        return redirect()->route('enableuser',[$id]);
+        //return redirect()->route('enableuser',[$id]);
     }
     public function resetpassword(Request $request){
         $zMail = request('email');
@@ -665,4 +702,17 @@ class UserController extends Controller
         
         echo $zReponse;
     }
+    public static function supprimeruser($user_id)
+    {
+       
+        $tool = User::findOrFail($user_id);
+        $tool->delete($user_id);
+        //echo $id;
+        echo "OK";
+        //return response()->json(['success'=>'Record deleted successduly']);
+    
+    
+        
+    }
+    
 }

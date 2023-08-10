@@ -21,9 +21,8 @@ class Processing extends Model
         'requestwfs.user_id as usersourceid','tools.name as toolname','tools.id as idtool','type_requests.id as idtyperequest',
         'type_requests.name as type_requestname',
         'requestwfs.created_at as created_at')
-        ->where('processings.is_finished',0)
+        ->whereIn('processings.is_finished',[0,2])
         ->where('process_users.user_id',$user_id)
-        ->orWhere('processings.is_finished',2)
         ->orderBy('processings.id','DESC')
         ->get(); 
         return $toListProcessing ;       

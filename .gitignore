@@ -1,4 +1,6 @@
 /public/images
 /public/docrequest
+/public/target-files
+/vendor
 .env
-ProcessAchievementController.php
+

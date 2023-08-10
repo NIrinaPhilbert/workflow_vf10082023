@@ -167,7 +167,7 @@
         */
 		$mail = new PHPMailer();
         $mail->From = "workflow@snis-sante.net" ;
-        $mail->FromName = "Full Name";
+        $mail->FromName = "Workflow";
         if($_SERVER['HTTP_HOST'] == 'workflow.snis-sante.net')
         {
             $mail->SMTPDebug = 2 ;
@@ -200,7 +200,7 @@
     }
     //ENVOI EMAIL AVEC PIECE JOINTE
     public static function sendnotification_with_pj($maildestinataire,$subject,$header,$Message,$from, $tzFichier){
-       // echo 'ici envoi email testons' ;
+        //echo 'ici envoi email testons' ;
        // exit() ;
         //mail('wfnvmail@gmail.com', 'sujet', 'message') ;
         //exit() ;
@@ -209,7 +209,7 @@
 
 		$mail = new PHPMailer();
         $mail->From = "workflow@snis-sante.net" ;
-        $mail->FromName = "Full Name";
+        $mail->FromName = "Workflow";
         if($_SERVER['HTTP_HOST'] == 'workflow.snis-sante.net')
         {
             
@@ -243,7 +243,7 @@
         } catch (Exception $e) {
             //echo "Mailer Error: " . $mail->ErrorInfo;
         }
-        exit() ;
+        //exit() ;
         /*
         echo '<pre>' ;
         print_r($tzFichier) ;

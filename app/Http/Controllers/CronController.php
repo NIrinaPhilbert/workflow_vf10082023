@@ -171,5 +171,26 @@ public function index(){
             }
         }
     }
+    public function testEnvoiEmail()
+    {
+                
+        //if(!mail('wfnvmail@gmail.com', 'sujet', 'message'))
+
+        //if(Helper::sendnotification('wfnvmail@gmail.com','[test titre email]','[test email]','Contenu message'))
+        Helper::sendnotification('wfnvmail@gmail.com','[test titre email<<<===>]','[test email]','Contenu message') ;
+        /*
+        $headers = "From: volatafita@gmail.com" ;
+        if(mail('wfnvmail@gmail.com', 'sujet', 'message', $headers))
+        {
+            echo 'SUCCES: envoi Email' ;
+        }
+        else
+        {
+            echo 'ECHEC envoi Email' ;
+        }
+        */
+        exit() ;
+
+    }
     
 }

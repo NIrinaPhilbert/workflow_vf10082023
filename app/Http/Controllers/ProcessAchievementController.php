@@ -102,6 +102,32 @@ class ProcessAchievementController extends Controller
             ->where('id', $idrequest)
             ->update(['status_id' => 3]);
         }
+
+        $toRequestwf = Requestwf::getRequestById($idrequest) ;
+        $zRequestNom = $toRequestwf[0]->Objet ;
+        $zUserOwnerEmail = $toRequestwf[0]->useremail ;
+
+        $subject = "Notification demande traitée" ;
+        $header = "Notification demande traité" ;
+        $zMessageNotificationOtherDes = "La demande <b>" . $zRequestNom . "</b> a bien été traitée.";
+        $zMessageNotificationOwner = "Votre demande <b>" . $zRequestNom . "</b> a bien été traitée.";
+
+        $QueryListeMailDestinationNotification = DB::table('requestwf_email_addresses')
+                    ->join('reply_email_addresses','reply_email_addresses.id','=','requestwf_email_addresses.reply_email_address_id')
+                    ->select('reply_email_addresses.rea_email as mailaddress')
+                    ->where('requestwf_email_addresses.requestwf_id','=',$idrequest)
+                    ->get();
+        // Send mail notification for other destination
+        foreach ($QueryListeMailDestinationNotification as $omailaddress){
+            //echo "adresse_mail=".$mailaddress;
+
+
+
+            Helper::sendnotification($omailaddress->mailaddress,$subject,$header,$zMessageNotificationOtherDes, "contact@snis-sante.net");
+            sleep(2) ; //A VOIR!!
+
+        }
+        Helper::sendnotification($zUserOwnerEmail,$subject,$header,$zMessageNotificationOwner, "contact@snis-sante.net") ;
     }
     public function store(Request $request)
     {
@@ -114,6 +140,7 @@ class ProcessAchievementController extends Controller
         $process_status = $_POST['process_status'];
         $process_date = $_POST['process_date'];
         $comment_process = $_POST['comment_process'];
+        $bTraitementEncours = true ;
         //si status traitement == 1
         if($process_status == 1){//traitement fini immediat
 
@@ -125,6 +152,7 @@ class ProcessAchievementController extends Controller
             DB::table('requestwfs')
             ->where('id', $idrequest)
             ->update(['status_id' => 3]);
+            $bTraitementEncours = false ;
 
         }else{
 
@@ -139,7 +167,7 @@ class ProcessAchievementController extends Controller
            
         }
         //insert into process
-        /*
+        
             $idprocessachievement = DB::table('process_achievements')->insertGetId(
                 ['process_id' => $idprocess,
                 'user_id' => $user_id,
@@ -147,58 +175,85 @@ class ProcessAchievementController extends Controller
                 'process_achievement_date' => $process_date
                 ]
             );
-            */
-            $idprocessachievement = 100 ;
+          
+
+          //echo 'ici' ;
+          //exit() ;  
+            //$idprocessachievement = 100 ;
         //Création fichier
         $delete[] = "";
         $tzFichier = array() ;
         if(file_exists(public_path()."/target-files-process/".$user_id."/")){
-                $target_dir_user = public_path()."/target-files-process/".$user_id."/";
-                $target_process = public_path()."/docrequest/".$idrequest."/dossier_traitement/".$idprocessachievement."/";
-                if (!file_exists($target_process)) mkdir($target_process, 0777, true);
-                $files = scandir($target_dir_user);
-                foreach($files as $file) {
-               
-                    if (in_array($file, array(".",".."))) continue;
-                    // If we copied this successfully, mark it for deletion
-                    if (copy($target_dir_user.$file, $target_process.$file)) {
-                        $delete[] = $target_dir_user.$file;
-                        $tzFichier[] = $target_process.$file ;
-                    }
+            $target_dir_user = public_path()."/target-files-process/".$user_id."/";
+            $target_process = public_path()."/docrequest/".$idrequest."/dossier_traitement/".$idprocessachievement."/";
+            if (!file_exists($target_process)) mkdir($target_process, 0777, true);
+            $files = scandir($target_dir_user);
+            foreach($files as $file) {
+        
+                if (in_array($file, array(".",".."))) continue;
+                // If we copied this successfully, mark it for deletion
+                if (copy($target_dir_user.$file, $target_process.$file)) {
+                    $delete[] = $target_dir_user.$file;
+                    $tzFichier[] = $target_process.$file ;
                 }
-                Helper::delTree($target_dir_user);
-                Helper::sendnotification_with_pj("miorasemidsi@gmail.com","TEST ENVOI","TITRE DANS LE MESSAGE","Texte","contact@snis-sante.net", $tzFichier) ;
-                //traitement suppression dossier
-                //if(sizeof($delete) > 0){
-                /*foreach ($delete as $file) {
-                    unlink($file);
-                }
-                //}*/
+            }
+            Helper::delTree($target_dir_user);
+                    // Helper::sendnotification_with_pj("miorasemidsi@gmail.com","TEST ENVOI","TITRE DANS LE MESSAGE","Texte","contact@snis-sante.net", $tzFichier) ;
 
-                //fin création fichier
+            $toRequestwf = Requestwf::getRequestById($idrequest) ;
+            /*
+            echo '<pre>';
+            print_r($toRequestwf);
+            echo '</pre>';
+            exit();
+            */
+            $zRequestNom = $toRequestwf[0]->Objet ;
+            $zUserOwnerEmail = $toRequestwf[0]->useremail ;
+
+            $QueryListeMailDestinationNotification = DB::table('requestwf_email_addresses')
+                    ->join('reply_email_addresses','reply_email_addresses.id','=','requestwf_email_addresses.reply_email_address_id')
+                    ->select('reply_email_addresses.rea_email as mailaddress')
+                    ->where('requestwf_email_addresses.requestwf_id','=',$idrequest)
+                    ->get();
+            if($bTraitementEncours)
+            {
+                $subject = "Notification de demande initiée et en cours de traitement" ;
+                $header = "Notification de demande initiée et en cours de traitement" ;
+                $zMessageNotificationOtherDes = "La demande <b>" . $zRequestNom . "</b> est déjà initiée et en cours de traitement. Veuillez consulter la pièce jointe";
+                $zMessageNotificationOwner = "Votre demande <b>" . $zRequestNom . "</b> est déjà initiée et en cours de traitement. Veuillez consulter votre pièce jointe";
+            }
+            else
+            {
+                $subject = "Notification achevement traitement de demande" ;
+                $header = "Notification achevement traitement de demande" ;
+                $zMessageNotificationOtherDes = "La demande <b>" . $zRequestNom . "</b> a bien été traitée. Veuillez consulter la pièce jointe";
+                $zMessageNotificationOwner = "Votre demande <b>" . $zRequestNom . "</b> a bien été traitée. Veuillez consulter votre pièce jointe";
+            }
+            
+            
+
+            
+            // Send mail notification for other destination
+            foreach ($QueryListeMailDestinationNotification as $omailaddress){
+                //echo "adresse_mail=".$mailaddress;
+
+
+
+                Helper::sendnotification_with_pj($omailaddress->mailaddress,$subject,$header,$zMessageNotificationOtherDes, "contact@snis-sante.net",  $tzFichier);
+                sleep(2) ; //A VOIR!!
+
+            }
+            Helper::sendnotification_with_pj($zUserOwnerEmail,$subject,$header,$zMessageNotificationOwner, "contact@snis-sante.net", $tzFichier) ;
+            //traitement suppression dossier
+            //if(sizeof($delete) > 0){
+            /*foreach ($delete as $file) {
+                unlink($file);
+            }
+            //}*/
+
+            //fin création fichier
         }
-        /*
-        $to = "miorasemidsi@gmail.com" ;
-		$subject = "sujet" ;
-		
-		$headers = "Content-Type: text/plain; charset=utf-8\r\n" ;
-		$headers .= "From: volatafita@gmail.com\r\n" ;
-		
-		$message = "message statika be mihitsy sans header autre laravely" ;
-		
-		
-		
-		
-        if(mail($to, $subject, $message, $headers))
-		{
-			echo 'envoyé' ;
-		}
-		else
-		{
-			echo 'NON envoyé' ;
-		}
-        exit() ;
-        */
+
         echo "1";
 
         //===========================================================================================//

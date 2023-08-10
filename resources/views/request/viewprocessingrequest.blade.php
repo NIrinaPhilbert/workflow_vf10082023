@@ -402,7 +402,7 @@
                         async:true,
                         success: function (data) {
                           console.log(data) ;
-                            //window.location = urlnextpage;
+                            window.location = urlnextpage;
                             return data
                             },
                         error: function (data) {

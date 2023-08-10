@@ -17,6 +17,7 @@ class AjaxUserController extends Controller
     {
         $this->middleware('auth');
     }
+
     public function index()
     {
         
@@ -84,4 +85,5 @@ class AjaxUserController extends Controller
             return view('user.userdt', compact('dataUser','data'));
         
     }
+    
 }

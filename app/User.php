@@ -16,6 +16,7 @@ class User extends Authenticatable
      *
      * @var array
      */
+    protected $table = 'users';
     protected $fillable = [
         'name', 'entity_id', 'function', 'email', 'phone', 'password', 'activated', 'administrator','answering','validator','image' 
     ];
@@ -203,6 +204,16 @@ class User extends Authenticatable
         ->where('entity_id',$iEntityId)
         ->get(); 
         return $ListUserbyentity ;
+    }
+    public static function verifexistencedatabyuserid($userid){
+        $zSqlRequestHistoriesUser = "select count(*) as nombre_donnees from request_histories rh where (rh.owner_request_user_id = " . $userid . " OR rh.sender_request_user_id = " . $userid . ")" ;
+        $getNombre = DB::select($zSqlRequestHistoriesUser);
+        $iNbreLigneHistoryRequestByUserId = 0 ;
+        foreach($getNombre as $oNombre)
+        {
+            $iNbreLigneHistoryRequestByUserId = $oNombre->nombre_donnees ;
+        }
+        return ($iNbreLigneHistoryRequestByUserId > 0) ? true : false ; 
     }
 
     

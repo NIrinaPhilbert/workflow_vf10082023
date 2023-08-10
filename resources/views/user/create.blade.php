@@ -64,6 +64,17 @@
                                                             </span>
                                                             @enderror
                                                         </div>
+                                                        <div class="form-group mb-3">
+                                                            <label for="name" class="w-100">Fonction</label>
+                                                            <input id="function" type="text" class="form-control @error('function') is-invalid @enderror" name="function" value="{{ old('function') }}" required autocomplete="function" autofocus>
+                                                            
+                                                            @error('function')
+                                                                <span class="invalid-feedback" role="alert">
+                                                                    <strong>{{ $message }}</strong>
+                                                                </span>
+                                                            @enderror
+                                                            
+                                                        </div> 
                                                         <div class="input-group mb-3">
                                                             <label class="w-100">Email</label>
                                                             <input type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="" required autocomplete="email">
@@ -122,6 +133,16 @@
                                                                 <input type="radio" id="answerYes" value="1" name="useranswering">
                                                                 <label for="answerYes">Oui</label>
                                                             </div>
+                                                        </div>
+                                                        <div class="form-group mb-3">
+                                                            <label for="Telephone" class="w-100">Téléphone</label>
+                                                            <input id="tel" type="text" class="form-control @error('tel') is-invalid @enderror" name="tel" value="{{ old('tel') }}" required ="tel">
+                                                                
+                                                            @error('tel')
+                                                                <span class="invalid-feedback" role="alert">
+                                                                    <strong>{{ $message }}</strong>
+                                                                </span>
+                                                            @enderror
                                                         </div>
                                                         <div class="input-group mb-3">
                                                             <label class="w-100">Mot de passe</label>

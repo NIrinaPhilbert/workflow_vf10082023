@@ -143,6 +143,13 @@
                           $zValAdministration = Helper::setOuiNon($user->administrator);
                           $zValRepondeur = Helper::setOuiNon($user->answering);
                           $zValValideur = Helper::setOuiNon($user->validator);
+                          //==================================================//
+                          //$zValActivation = $user->activated;
+                          //$zValCompteTemp = 1;
+                          //$zValAdministration = 1;
+                          //$zValRepondeur = 1;
+                          //$zValValideur = 1;
+                          //==================================================//
                           //$dataid = $dataid.'data-id=\"'.$user->id.'\"';
                           //$zUsersDatatable .= '["'.$user->id.'","'.$user->name.'","'.$user->email.'","'.$user->entity->name.'","'.$zValActivation.'","'.$zValAdministration.'","'.$zValRepondeur.'","'.$zValValideur.'","'.$user->created_at.'","<button type=\"button\" class=\"btn btn-edit btn-info\"'.$dataid.'>Edit</button>  <button type=\"button\" class=\"btn btn-delete btn-danger\"'.$dataid.'>Delete</button>"],';
                          
@@ -157,32 +164,43 @@
                             ?>
                               <img src="<?php echo asset('images').'/'.$zUserImage; ?>" class="img-thumbnail" alt="User Image">
                           </div></td>
-                        <td><?php echo $user->name; ?></td>
+                        <td id='td_td_info_{{$user->id}}'>
+                          <?php echo $user->name;?>
+                          <br/>
+                          <span id='td_info_{{$user->id}}' class="spanInfos" style="display:none;background:white;color:black!important;font-weight:bolder;">Mise à jour effectué</span>
+                        </td>
                         <td>{{$user->phone}}</td>
                         <td>{{$user->email}}</td>
                         <td><?php $zEntity = App\Entity::getNameEntityById($user->entity_id); echo $zEntity?></td>
                         <td>{{$user->function}}</td>
-                        <td>{{$zValActivation}}</td>
+                        <td><span id='td_activation_{{$user->id}}'>{{$zValActivation}}</span></td>
                         <td>{{$zValCompteTemp}}</td>
-                        <td>{{$zValAdministration}}</td>
-                        <td>{{$zValRepondeur}}</td>
-                        <td>{{$zValValideur}}</td>
+                        <td><span id='td_administration_{{$user->id}}'>{{$zValAdministration}}</span></td>
+                        <td><span id='td_repondeur_{{$user->id}}'>{{$zValRepondeur}}</span></td>
+                        <td><span id='td_valideur_{{$user->id}}'>{{$zValValideur}}</span></td>
                         <td>{{$user->created_at}}</td>
 
                         <td>
                           <a href=""><i class="fas fa-eye text-primary"></i></a>
                           <a href="/user/edit/{{ $user->id }}"><i class="fas fa-edit ml-1 text-secondary"></i></a>
                           <?php if($user->activated == 0 ) {?>
-                          <a href="/enableuser/{{$user->id}}" class="btn btn-default btn-sm">
+                          <a href="javascript:void(0);"  onclick="show_modal_enable_user({{$user->id}});" class="btn btn-default btn-sm link_show_modal_{{$user->id}}">
                                 Enable user <span class="glyphicon glyphicon-sort"></span>
                           </a>
                           <?php } ?>
                           <?php if($user->activated == 1 ) {?>
-                          <a href="/enableuser/{{$user->id}}" class="btn btn-default btn-sm">
+                          <a href="javascript:void(0);" onclick="show_modal_enable_user({{$user->id}});" class="btn btn-default btn-sm link_show_modal_{{$user->id}}">
                                 Disable user <span class="glyphicon glyphicon-sort"></span>
                           </a>
                           <?php } ?>
-                          <a href="#" class="btn-delete"><i class="fas fa-trash ml-1 text-danger"></i></a>
+                          
+                          <?php
+                              $bUserDonnee = App\User::verifexistencedatabyuserid($user->id) ;
+                              
+                          ?>
+                          <?php if(!$bUserDonnee){ ?>
+                            <a href="javascript:void(0);" class="btn-delete"  onclick="supprimer_user(<?php echo $user->id ; ?>);" ><i class="fas fa-trash ml-1 text-danger"></i></a>
+                          <?php } ?>
                         </td>
                       </tr>
                       <?php } ?>
@@ -203,6 +221,74 @@
     <!-- /.content -->
   </div>
   <!-- /.content-wrapper -->
-
+  <!---------------------start modal enable user------- --------------> 
+  <div class="modal fade" id="modal-send-comment" aria-hidden="true">
+      <div class="modal-dialog">
+              <div class="modal-content">
+                  <div class="modal-header">
+                      <h4 class="modal-title" id="sendCommentModal">Activation utilisateur</h4>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">x</span>
+                      </button>
+                  </div>
+                  <div class="modal-body" style="padding:0!important;">
+                      Body Activation utilisateur
+                  </div>
+                  <div class="modal-footer">
+                      
+                  </div>
+              </div>
+      </div>
+  </div>
+<!-----------------end modal enable user----------- -------------->
+<script type="text/javascript">
+  
+  function supprimer_user(_iUserId)
+  {
+    var urlnextpage = "<?php echo url("userdatatable");?>" ;
+    Swal.fire({
+          html: '<?php echo '<span class="text-lg">Etes vous sur de proceder à la suppression de cet utilisateur ?</span>'; ?>',
+          icon: 'question',
+          showCancelButton: true,
+          confirmButtonText: 'Yes',
+          cancelButtonText: 'No'
+      }).then((result) => {
+          if (result.isConfirmed) {
+            $.ajax({
+                type: "get",                        
+                url:"<?php echo url("supprimeruser");?>" + '/' + _iUserId,
+                context:document.body,
+                async:false,
+                success: function (data) {
+                    window.location = urlnextpage;
+                    
+                    },
+                error: function (data) {
+                    console.log('Error:', data);
+                }
+            });
+          }
+      })
+  }
+  function show_modal_enable_user(_iUserId)
+  {
+      $('#modal-send-comment').modal('show') ;
+      $('.spanInfos').hide() ;
+      $.ajax({
+          type: "get",                        
+          url:"<?php echo url("enableuser");?>" + '/' + _iUserId,
+          //context:document.body,
+          async:true,
+          success: function (data) {
+              $('#modal-send-comment .modal-body').html(data) ;
+          },
+          error: function (data) {
+              console.log('Error:', data);
+          }
+      });
+  }
+ 
+</script>
 @endsection
+
 

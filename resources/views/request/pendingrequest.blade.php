@@ -71,7 +71,7 @@
                       
                       ?>
                       <tr class="item-tr">
-                        <td><a href="<?php echo url("request/viewpendingrequest/{$request->idrequesthistories}");?>">{{$request->idrequesthistories}}</a></td>
+                        <td><a href="<?php echo url("request/viewpendingrequest/{$request->idrequesthistories}");?>">{{$request->idrequest}}</a></td>
                         <td>{{$request->Objetwf}}</td>
                         <td>{{$request->toolname}}</td>
                         <td>{{$request->type_requestname}}</td>

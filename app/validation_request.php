@@ -89,5 +89,18 @@ class validation_request extends Model
         return $zRemainingEntity;
         
     }
+
+    public static function getRemainingEntityId($toolid,$typerequestid,$currentrank,$maxrank)
+    {
+        $getRemainingEntityId = DB::table('validation_requests')
+            ->join('entities','entities.id', '=', 'validation_requests.entity_id')
+            ->where('tool_id',$toolid)
+            ->where('type_request_id',$typerequestid)
+            ->where('rank','>',$currentrank)
+            ->where('rank','<',$maxrank+1)
+            ->select('entities.id as entity_id')
+            ->get();
+        return $getRemainingEntityId;
+    }  
    
 }

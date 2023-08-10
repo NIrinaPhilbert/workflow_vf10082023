@@ -99,11 +99,11 @@
                                                             
                                                                 
                                                                 <div class="form-check form-check-inline">
-                                                                    <input class="form-check-input" type="radio" name="activated" id="useractiveyes" value="1" <?php if($user->activated == 1) echo 'checked'?>>
+                                                                    <input class="form-check-input" type="radio" <?php if($user->administrator_user_logged == 0){ echo 'disabled="disabled"' ; } ?> name="activated" id="useractiveyes" value="1" <?php if($user->activated == 1) echo 'checked'?>>
                                                                     <label class="form-check-label" for="inlineRadio1">Oui</label>
                                                                 </div>
                                                                 <div class="form-check form-check-inline">
-                                                                    <input class="form-check-input" type="radio" name="activated" id="useractiveno" value="0" <?php if($user->activated == 0) echo 'checked'?>>
+                                                                    <input class="form-check-input" type="radio" <?php if($user->administrator_user_logged == 0){ echo 'disabled="disabled"' ; } ?> name="activated" id="useractiveno" value="0" <?php if($user->activated == 0) echo 'checked'?>>
                                                                     <label class="form-check-label" for="inlineRadio2">Non</label>
                                                                 </div>
                                                             
@@ -113,11 +113,11 @@
                                                         <div class="input-group mb-3">
                                                             <label class="w-100">Administrateur</label>
                                                             <div class="form-check form-check-inline">
-                                                                <input class="form-check-input" type="radio" name="administrator" id="useraadminyes" value="1" <?php if($user->administrator == 1) echo 'checked'?>>
+                                                                <input class="form-check-input" type="radio" <?php if($user->administrator_user_logged == 0){ echo 'disabled="disabled"' ; } ?> name="administrator" id="useraadminyes" value="1" <?php if($user->administrator == 1) echo 'checked'?>>
                                                                 <label class="form-check-label" for="inlineRadio1">Oui</label>
                                                             </div>
                                                             <div class="form-check form-check-inline">
-                                                                <input class="form-check-input" type="radio" name="administrator" id="useradminno" value="0" <?php if($user->administrator == 0) echo 'checked'?>>
+                                                                <input class="form-check-input" type="radio" <?php if($user->administrator_user_logged == 0){ echo 'disabled="disabled"' ; } ?> name="administrator" id="useradminno" value="0" <?php if($user->administrator == 0) echo 'checked'?>>
                                                                 <label class="form-check-label" for="inlineRadio2">Non</label>
                                                             </div>
 
@@ -127,11 +127,11 @@
                                                         <div class="input-group mb-3">
                                                             <label class="w-100">Valideur</label>
                                                             <div class="form-check form-check-inline">
-                                                                <input class="form-check-input" type="radio" name="validator" id="uservalidyes" value="1" <?php if($user->validator == 1) echo 'checked'?>>
+                                                                <input class="form-check-input" type="radio" <?php if($user->administrator_user_logged == 0){ echo 'disabled="disabled"' ; } ?> name="validator" id="uservalidyes" value="1" <?php if($user->validator == 1) echo 'checked'?>>
                                                                 <label class="form-check-label" for="inlineRadio1">Oui</label>
                                                             </div>
                                                             <div class="form-check form-check-inline">
-                                                                <input class="form-check-input" type="radio" name="validator" id="uservalidno" value="0" <?php if($user->validator == 0) echo 'checked'?>>
+                                                                <input class="form-check-input" type="radio" <?php if($user->administrator_user_logged == 0){ echo 'disabled="disabled"' ; } ?> name="validator" id="uservalidno" value="0" <?php if($user->validator == 0) echo 'checked'?>>
                                                                 <label class="form-check-label" for="inlineRadio2">Non</label>
                                                             </div>
 
@@ -139,11 +139,11 @@
                                                         <div class="input-group mb-3">
                                                             <label class="w-100">Repondeur</label>
                                                             <div class="form-check form-check-inline">
-                                                                <input class="form-check-input" type="radio" name="answering" id="useransweryes" value="1" <?php if($user->answering == 1) echo 'checked'?>>
+                                                                <input class="form-check-input" type="radio" <?php if($user->administrator_user_logged == 0){ echo 'disabled="disabled"' ; } ?> name="answering" id="useransweryes" value="1" <?php if($user->answering == 1) echo 'checked'?>>
                                                                 <label class="form-check-label" for="inlineRadio1">Oui</label>
                                                             </div>
                                                             <div class="form-check form-check-inline">
-                                                                <input class="form-check-input" type="radio" name="answering" id="useranswerno" value="0" <?php if($user->answering == 0) echo 'checked'?>>
+                                                                <input class="form-check-input" type="radio" <?php if($user->administrator_user_logged == 0){ echo 'disabled="disabled"' ; } ?> name="answering" id="useranswerno" value="0" <?php if($user->answering == 0) echo 'checked'?>>
                                                                 <label class="form-check-label" for="inlineRadio2">Non</label>
                                                             </div>
                                                         </div>
